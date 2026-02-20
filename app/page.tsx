@@ -196,6 +196,97 @@ export default function HomePage() {
         </div>
       </section>
 
+      {/* Supported Countries */}
+      <section className="max-w-7xl mx-auto px-6 py-20 border-t border-white/5">
+        <div className="grid lg:grid-cols-2 gap-8 mb-12">
+          <div>
+            <h2 className="text-3xl font-bold tracking-tight mb-3">Available in any country</h2>
+            <p className="text-gray-400 leading-relaxed">
+              One API integration works across all supported countries. Add a new corridor in minutes — no code changes required.
+            </p>
+          </div>
+          <div className="flex items-center">
+            <div className="bg-blue-500/5 border border-blue-500/20 rounded-xl px-5 py-4 w-full">
+              <p className="text-xs text-blue-400 mb-1">Want your country added?</p>
+              <p className="text-sm text-gray-300">We can onboard any country with a mobile money ecosystem. <Link href="/get-started" className="text-blue-400 hover:text-blue-300 transition-colors">Contact us →</Link></p>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
+          {[
+            {
+              flag: '🇹🇿', country: 'Tanzania', code: 'TZ', currency: 'TZS', status: 'live',
+              methods: ['M-Pesa', 'Airtel Money', 'Tigo Pesa', 'Halopesa'],
+              rate: '1 USDT ≈ 2,580 TZS',
+            },
+            {
+              flag: '🇰🇪', country: 'Kenya', code: 'KE', currency: 'KES', status: 'live',
+              methods: ['M-Pesa', 'Airtel Money'],
+              rate: '1 USDT ≈ 129 KES',
+            },
+            {
+              flag: '🇺🇬', country: 'Uganda', code: 'UG', currency: 'UGX', status: 'live',
+              methods: ['MTN Mobile Money', 'Airtel Money'],
+              rate: '1 USDT ≈ 3,720 UGX',
+            },
+            {
+              flag: '🇲🇼', country: 'Malawi', code: 'MW', currency: 'MWK', status: 'coming-soon',
+              methods: ['Airtel Money', 'TNM Mpamba'],
+              rate: '1 USDT ≈ 1,730 MWK',
+            },
+            {
+              flag: '🇿🇲', country: 'Zambia', code: 'ZM', currency: 'ZMW', status: 'coming-soon',
+              methods: ['MTN Mobile Money', 'Airtel Money', 'Zamtel Kwacha'],
+              rate: '1 USDT ≈ 27 ZMW',
+            },
+            {
+              flag: '🇬🇭', country: 'Ghana', code: 'GH', currency: 'GHS', status: 'coming-soon',
+              methods: ['MTN Mobile Money', 'Vodafone Cash', 'AirtelTigo Money'],
+              rate: '1 USDT ≈ 15 GHS',
+            },
+            {
+              flag: '🇳🇬', country: 'Nigeria', code: 'NG', currency: 'NGN', status: 'coming-soon',
+              methods: ['Bank Transfer', 'OPay', 'Palmpay'],
+              rate: '1 USDT ≈ 1,580 NGN',
+            },
+            {
+              flag: '🇷🇼', country: 'Rwanda', code: 'RW', currency: 'RWF', status: 'coming-soon',
+              methods: ['MTN Mobile Money', 'Airtel Money'],
+              rate: '1 USDT ≈ 1,340 RWF',
+            },
+            {
+              flag: '🇲🇿', country: 'Mozambique', code: 'MZ', currency: 'MZN', status: 'coming-soon',
+              methods: ['M-Pesa', 'Vodacom M-Pesa'],
+              rate: '1 USDT ≈ 64 MZN',
+            },
+          ].map(({ flag, country, currency, status, methods, rate }) => (
+            <div key={country} className={`bg-[#161b22] border rounded-xl p-5 relative ${status === 'live' ? 'border-white/10' : 'border-white/5 opacity-70'}`}>
+              <div className="flex items-start justify-between mb-4">
+                <div className="flex items-center gap-3">
+                  <span className="text-2xl">{flag}</span>
+                  <div>
+                    <p className="text-sm font-semibold text-white">{country}</p>
+                    <p className="text-xs text-gray-500 font-mono">{currency}</p>
+                  </div>
+                </div>
+                {status === 'live' ? (
+                  <span className="text-xs text-green-400 bg-green-500/10 border border-green-500/20 px-2 py-0.5 rounded-full">Live</span>
+                ) : (
+                  <span className="text-xs text-gray-500 bg-white/5 border border-white/10 px-2 py-0.5 rounded-full">Soon</span>
+                )}
+              </div>
+              <p className="text-xs font-mono text-blue-300 mb-3">{rate}</p>
+              <div className="flex flex-wrap gap-1.5">
+                {methods.map(m => (
+                  <span key={m} className="text-xs text-gray-400 bg-white/5 px-2 py-0.5 rounded">{m}</span>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+
       {/* Step-by-step integration */}
       <section className="max-w-7xl mx-auto px-6 py-20 border-t border-white/5">
         <h2 className="text-3xl font-bold tracking-tight mb-3">Step-by-step integration</h2>
