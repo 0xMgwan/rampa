@@ -346,6 +346,27 @@ export default function DocsPage() {
             </div>
           </section>
 
+          <section id="webhook-security">
+            <h2 className="text-2xl font-bold tracking-tight mb-4">Webhook Security</h2>
+            <p className="text-gray-400 mb-6 leading-relaxed">Every webhook request includes an <code className="bg-white/5 text-blue-300 px-1.5 py-0.5 rounded text-xs font-mono">X-Rampa-Signature</code> header. Always verify it before processing the payload.</p>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden mb-4">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500">Verify signature — Node.js</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                <span className="text-blue-400">const</span> crypto = <span className="text-blue-400">require</span>(<span className="text-orange-400">'crypto'</span>);<br/><br/>
+                <span className="text-blue-400">function</span> <span className="text-green-400">verifyWebhook</span>(payload, signature, secret) {'{'}<br/>
+                &nbsp;&nbsp;<span className="text-blue-400">const</span> computed = crypto<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;.createHmac(<span className="text-orange-400">'sha256'</span>, secret)<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;.update(<span className="text-blue-400">JSON</span>.stringify(payload))<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;.digest(<span className="text-orange-400">'hex'</span>);<br/>
+                &nbsp;&nbsp;<span className="text-blue-400">return</span> computed === signature;<br/>
+                {'}'}
+              </div>
+            </div>
+            <div className="bg-amber-500/5 border border-amber-500/20 rounded-lg px-4 py-3">
+              <p className="text-xs text-amber-400">Always reject webhooks with invalid signatures. Never process a webhook payload without verifying it first.</p>
+            </div>
+          </section>
+
           <section id="errors">
             <h2 className="text-2xl font-bold tracking-tight mb-4">Errors</h2>
             <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden">

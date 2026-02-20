@@ -229,6 +229,63 @@ export default function GetStartedPage() {
             </div>
           </section>
 
+          <section id="payment-methods">
+            <h2 className="text-2xl font-bold tracking-tight mb-6">Payment Methods</h2>
+            <p className="text-gray-400 mb-6 leading-relaxed">Retrieve available payment methods for a country before creating an order. Pass the <code className="bg-white/5 text-blue-300 px-1.5 py-0.5 rounded text-xs font-mono">id</code> as <code className="bg-white/5 text-blue-300 px-1.5 py-0.5 rounded text-xs font-mono">payment_method_id</code> when creating an order.</p>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden mb-4">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500 font-mono">GET /api/v1/partner/payment-methods?country_code=TZ</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                <span className="text-gray-500">curl </span><span className="text-orange-400">'https://rampa-production.up.railway.app/api/v1/partner/payment-methods?country_code=TZ'</span> \<br/>
+                &nbsp;&nbsp;<span className="text-gray-500">-H </span><span className="text-green-400">'X-API-Key: sk_live_your_key'</span>
+              </div>
+            </div>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500">Response 200</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                {'{'}<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"success"</span>: <span className="text-blue-400">true</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"payment_methods"</span>: [{'{'}<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"id"</span>: <span className="text-orange-400">"lipa-number"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"provider"</span>: <span className="text-orange-400">"Lipa Number (All Providers)"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"account_number"</span>: <span className="text-orange-400">"70005436"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"limits"</span>: {'{'} <span className="text-green-400">"min"</span>: <span className="text-yellow-400">1000</span>, <span className="text-green-400">"max"</span>: <span className="text-yellow-400">10000000</span> {'}'}<br/>
+                &nbsp;&nbsp;{'}'}]<br/>
+                {'}'}
+              </div>
+            </div>
+          </section>
+
+          <section id="error-codes">
+            <h2 className="text-2xl font-bold tracking-tight mb-6">Error Codes</h2>
+            <p className="text-gray-400 mb-6 leading-relaxed">All errors return a JSON body with a <code className="bg-white/5 text-blue-300 px-1.5 py-0.5 rounded text-xs font-mono">success: false</code> flag and an <code className="bg-white/5 text-blue-300 px-1.5 py-0.5 rounded text-xs font-mono">error</code> message.</p>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden mb-6">
+              <table className="w-full text-sm">
+                <thead><tr className="border-b border-white/5">
+                  <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">HTTP Status</th>
+                  <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Meaning</th>
+                </tr></thead>
+                <tbody className="divide-y divide-white/5">
+                  {[['400','Bad Request — missing or invalid parameters'],['401','Unauthorized — invalid or missing API key'],['404','Not Found — order does not exist'],['409','Conflict — order already verified'],['429','Too Many Requests — rate limit exceeded'],['500','Internal Server Error']].map(([code, meaning]) => (
+                    <tr key={code}>
+                      <td className="px-4 py-3 font-mono text-xs text-red-400">{code}</td>
+                      <td className="px-4 py-3 text-xs text-gray-400">{meaning}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500">Example error response</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                {'{'}<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"success"</span>: <span className="text-blue-400">false</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"error"</span>: <span className="text-orange-400">"Order not found"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"code"</span>: <span className="text-yellow-400">404</span><br/>
+                {'}'}
+              </div>
+            </div>
+          </section>
+
           <div className="bg-blue-600 rounded-xl p-8 text-center">
             <h3 className="text-xl font-bold mb-2">Ready to go deeper?</h3>
             <p className="text-blue-100 text-sm mb-6">Explore the full API reference for all endpoints, parameters, and response schemas.</p>
