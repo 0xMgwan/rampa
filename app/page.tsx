@@ -231,32 +231,32 @@ export default function HomePage() {
               rate: '1 USDT ≈ 3,720 UGX',
             },
             {
-              flag: '🇲🇼', country: 'Malawi', code: 'MW', currency: 'MWK', status: 'coming-soon',
+              flag: '🇲🇼', country: 'Malawi', code: 'MW', currency: 'MWK', status: 'live',
               methods: ['Airtel Money', 'TNM Mpamba'],
               rate: '1 USDT ≈ 1,730 MWK',
             },
             {
-              flag: '🇿🇲', country: 'Zambia', code: 'ZM', currency: 'ZMW', status: 'coming-soon',
+              flag: '🇿🇲', country: 'Zambia', code: 'ZM', currency: 'ZMW', status: 'live',
               methods: ['MTN Mobile Money', 'Airtel Money', 'Zamtel Kwacha'],
               rate: '1 USDT ≈ 27 ZMW',
             },
             {
-              flag: '🇬🇭', country: 'Ghana', code: 'GH', currency: 'GHS', status: 'coming-soon',
+              flag: '🇬🇭', country: 'Ghana', code: 'GH', currency: 'GHS', status: 'live',
               methods: ['MTN Mobile Money', 'Vodafone Cash', 'AirtelTigo Money'],
               rate: '1 USDT ≈ 15 GHS',
             },
             {
-              flag: '🇳🇬', country: 'Nigeria', code: 'NG', currency: 'NGN', status: 'coming-soon',
+              flag: '🇳🇬', country: 'Nigeria', code: 'NG', currency: 'NGN', status: 'live',
               methods: ['Bank Transfer', 'OPay', 'Palmpay'],
               rate: '1 USDT ≈ 1,580 NGN',
             },
             {
-              flag: '🇷🇼', country: 'Rwanda', code: 'RW', currency: 'RWF', status: 'coming-soon',
+              flag: '🇷🇼', country: 'Rwanda', code: 'RW', currency: 'RWF', status: 'live',
               methods: ['MTN Mobile Money', 'Airtel Money'],
               rate: '1 USDT ≈ 1,340 RWF',
             },
             {
-              flag: '🇲🇿', country: 'Mozambique', code: 'MZ', currency: 'MZN', status: 'coming-soon',
+              flag: '🇲🇿', country: 'Mozambique', code: 'MZ', currency: 'MZN', status: 'live',
               methods: ['M-Pesa', 'Vodacom M-Pesa'],
               rate: '1 USDT ≈ 64 MZN',
             },
