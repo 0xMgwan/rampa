@@ -1,0 +1,244 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Country {
+  id                String            @id @default(uuid())
+  code              String            @unique
+  name              String
+  currencyCode      String
+  currencySymbol    String
+  currencyDecimals  Int               @default(2)
+  status            CountryStatus     @default(ACTIVE)
+  supportedNetworks String[]
+  regulations       Json?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  paymentProviders  PaymentProvider[]
+  exchangeRates     ExchangeRate[]
+  orders            Order[]
+
+  @@map("countries")
+}
+
+model PaymentProvider {
+  id              String                @id @default(uuid())
+  countryId       String
+  providerName    String
+  providerType    PaymentProviderType
+  accountNumber   String?
+  accountName     String?
+  instructions    String?
+  apiCredentials  String?
+  status          ProviderStatus        @default(ACTIVE)
+  feesPercentage  Float                 @default(0)
+  phoneFormat     String?
+  limits          Json?
+  createdAt       DateTime              @default(now())
+  updatedAt       DateTime              @updatedAt
+
+  country         Country               @relation(fields: [countryId], references: [id], onDelete: Cascade)
+  orders          Order[]
+
+  @@map("payment_providers")
+}
+
+model ExchangeRate {
+  id            String        @id @default(uuid())
+  countryId     String
+  currencyCode  String
+  usdcBuyRate   Float
+  usdcSellRate  Float
+  usdtBuyRate   Float
+  usdtSellRate  Float
+  source        RateSource    @default(MANUAL)
+  updatedAt     DateTime      @updatedAt
+  createdAt     DateTime      @default(now())
+
+  country       Country       @relation(fields: [countryId], references: [id], onDelete: Cascade)
+
+  @@unique([countryId, currencyCode])
+  @@map("exchange_rates")
+}
+
+model Partner {
+  id              String        @id @default(uuid())
+  name            String
+  email           String        @unique
+  apiKeyHash      String        @unique
+  webhookUrl      String?
+  webhookSecret   String?
+  ipWhitelist     String[]
+  allowedCountries String[]
+  status          PartnerStatus @default(ACTIVE)
+  rateLimit       Int           @default(100)
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  orders          Order[]
+
+  @@map("partners")
+}
+
+model Order {
+  id                  String        @id @default(uuid())
+  orderNumber         String        @unique
+  partnerId           String
+  partnerOrderId      String?
+  type                OrderType
+  status              OrderStatus   @default(PENDING)
+  
+  amountCrypto        Float
+  cryptoType          CryptoType
+  network             Network
+  amountFiat          Float
+  currencyCode        String
+  exchangeRate        Float
+  
+  destinationAddress  String?
+  depositAddress      String?
+  userFullName        String?
+  userPhone           String?
+  
+  countryId           String
+  paymentProviderId   String?
+  transactionId       String?
+  txHash              String?
+  explorerUrl         String?
+  
+  autoProcess         Boolean       @default(false)
+  requireExact        Boolean       @default(false)
+  
+  metadata            Json?
+  errorMessage        String?
+  
+  expiresAt           DateTime
+  completedAt         DateTime?
+  createdAt           DateTime      @default(now())
+  updatedAt           DateTime      @updatedAt
+
+  partner             Partner       @relation(fields: [partnerId], references: [id], onDelete: Cascade)
+  country             Country       @relation(fields: [countryId], references: [id])
+  paymentProvider     PaymentProvider? @relation(fields: [paymentProviderId], references: [id])
+  webhooks            Webhook[]
+
+  @@index([partnerId])
+  @@index([orderNumber])
+  @@index([status])
+  @@index([createdAt])
+  @@map("orders")
+}
+
+model Webhook {
+  id              String        @id @default(uuid())
+  orderId         String
+  eventType       WebhookEvent
+  payload         Json
+  status          WebhookStatus @default(PENDING)
+  attempts        Int           @default(0)
+  lastAttemptAt   DateTime?
+  nextRetryAt     DateTime?
+  errorMessage    String?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
+
+  order           Order         @relation(fields: [orderId], references: [id], onDelete: Cascade)
+
+  @@index([orderId])
+  @@index([status])
+  @@map("webhooks")
+}
+
+model AuditLog {
+  id          String      @id @default(uuid())
+  partnerId   String?
+  action      String
+  resource    String
+  resourceId  String?
+  ipAddress   String?
+  userAgent   String?
+  metadata    Json?
+  createdAt   DateTime    @default(now())
+
+  @@index([partnerId])
+  @@index([createdAt])
+  @@map("audit_logs")
+}
+
+enum CountryStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+}
+
+enum PaymentProviderType {
+  MOBILE_MONEY
+  BANK_TRANSFER
+  CARD
+}
+
+enum ProviderStatus {
+  ACTIVE
+  INACTIVE
+  MAINTENANCE
+}
+
+enum RateSource {
+  MANUAL
+  API
+  HYBRID
+}
+
+enum PartnerStatus {
+  ACTIVE
+  SUSPENDED
+  INACTIVE
+}
+
+enum OrderType {
+  BUY
+  SELL
+}
+
+enum OrderStatus {
+  PENDING
+  VERIFYING
+  PROCESSING
+  COMPLETED
+  FAILED
+  EXPIRED
+  CANCELLED
+}
+
+enum CryptoType {
+  USDC
+  USDT
+}
+
+enum Network {
+  BEP20
+  TRC20
+  BASE
+  POLYGON
+}
+
+enum WebhookEvent {
+  ORDER_CREATED
+  ORDER_VERIFYING
+  ORDER_PROCESSING
+  ORDER_COMPLETED
+  ORDER_FAILED
+  ORDER_EXPIRED
+}
+
+enum WebhookStatus {
+  PENDING
+  SENT
+  FAILED
+}
