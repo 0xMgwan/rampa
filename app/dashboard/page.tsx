@@ -9,6 +9,22 @@ export default function DashboardPage() {
   const [activeProvider, setActiveProvider] = useState('lipa-number');
   const [webhookUrl, setWebhookUrl] = useState('');
   const [rateSaved, setRateSaved] = useState(false);
+  const [liquidityChain, setLiquidityChain] = useState('BEP20');
+  const [liquidityAmount, setLiquidityAmount] = useState('');
+  const [liquidityToken, setLiquidityToken] = useState('USDT');
+  const [liquiditySaved, setLiquiditySaved] = useState(false);
+
+  const chainWallets: Record<string, { address: string; balance: string; explorer: string }> = {
+    BEP20: { address: '0x742d35Cc6634C0532925a3b8D4C9C4e...', balance: '245.50', explorer: 'https://bscscan.com' },
+    TRC20: { address: 'TQn9Y2khEsLJW1ChVWFMSMeRDow5KcbLSE...', balance: '120.00', explorer: 'https://tronscan.org' },
+    BASE: { address: '0x3fC91A3afd70395Cd496C647d5a6CC9D4...', balance: '80.25', explorer: 'https://basescan.org' },
+    POLYGON: { address: '0x68b3465833fb72A70ecDF485E0e4C7bD8...', balance: '55.75', explorer: 'https://polygonscan.com' },
+  };
+
+  const handleSetLiquidity = () => {
+    setLiquiditySaved(true);
+    setTimeout(() => setLiquiditySaved(false), 2000);
+  };
 
   const baseRate = 2580;
   const markupPct = parseFloat(markup) || 0;
@@ -244,6 +260,123 @@ export default function DashboardPage() {
               </div>
               <p className="text-xs text-gray-600 mt-2">We'll POST order status updates to this URL</p>
             </div>
+          </div>
+        </div>
+
+        {/* Hot Wallet Liquidity */}
+        <div className="bg-[#161b22] border border-white/10 rounded-xl p-6">
+          <div className="flex items-center justify-between mb-6">
+            <div>
+              <h2 className="text-base font-semibold">Hot Wallet Liquidity</h2>
+              <p className="text-xs text-gray-500 mt-0.5">Set available USDT/USDC per chain for automatic payouts</p>
+            </div>
+            <span className="text-xs text-blue-400 bg-blue-500/10 border border-blue-500/20 px-2.5 py-1 rounded-full">Auto-payout enabled</span>
+          </div>
+
+          {/* Chain balances overview */}
+          <div className="grid sm:grid-cols-4 gap-3 mb-6">
+            {Object.entries(chainWallets).map(([chain, info]) => (
+              <button
+                key={chain}
+                onClick={() => setLiquidityChain(chain)}
+                className={`text-left rounded-xl p-4 border transition-all ${
+                  liquidityChain === chain
+                    ? 'border-blue-500/50 bg-blue-500/5'
+                    : 'border-white/5 bg-[#0d1117] hover:border-white/10'
+                }`}
+              >
+                <div className="flex items-center justify-between mb-2">
+                  <span className={`text-xs font-mono font-semibold ${
+                    liquidityChain === chain ? 'text-blue-400' : 'text-gray-400'
+                  }`}>{chain}</span>
+                  <div className={`w-1.5 h-1.5 rounded-full ${
+                    parseFloat(info.balance) > 100 ? 'bg-green-400' :
+                    parseFloat(info.balance) > 50 ? 'bg-yellow-400' : 'bg-red-400'
+                  }`} />
+                </div>
+                <p className="text-lg font-bold text-white">{info.balance}</p>
+                <p className="text-xs text-gray-500">USDT available</p>
+              </button>
+            ))}
+          </div>
+
+          {/* Selected chain detail + set liquidity */}
+          <div className="bg-[#0d1117] rounded-xl p-5 border border-white/5">
+            <div className="flex items-start justify-between mb-5">
+              <div>
+                <p className="text-sm font-semibold text-white mb-1">{liquidityChain} Hot Wallet</p>
+                <p className="text-xs font-mono text-gray-500 truncate max-w-xs">{chainWallets[liquidityChain].address}</p>
+              </div>
+              <a
+                href={chainWallets[liquidityChain].explorer}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors"
+              >
+                Explorer <ExternalLink className="w-3 h-3" />
+              </a>
+            </div>
+
+            <div className="grid sm:grid-cols-3 gap-3">
+              {/* Token selector */}
+              <div>
+                <p className="text-xs text-gray-500 mb-2">Token</p>
+                <div className="flex gap-2">
+                  {['USDT', 'USDC'].map(token => (
+                    <button
+                      key={token}
+                      onClick={() => setLiquidityToken(token)}
+                      className={`flex-1 py-2.5 rounded-lg text-sm font-medium border transition-all ${
+                        liquidityToken === token
+                          ? 'bg-blue-600 border-blue-600 text-white'
+                          : 'bg-[#161b22] border-white/10 text-gray-400 hover:border-white/20'
+                      }`}
+                    >
+                      {token}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              {/* Amount input */}
+              <div>
+                <p className="text-xs text-gray-500 mb-2">Set Liquidity Amount</p>
+                <div className="flex items-center bg-[#161b22] border border-white/10 rounded-lg px-3 py-2.5 gap-2">
+                  <input
+                    type="number"
+                    value={liquidityAmount}
+                    onChange={e => setLiquidityAmount(e.target.value)}
+                    placeholder="e.g. 500"
+                    className="bg-transparent text-white text-sm font-mono w-full outline-none placeholder-gray-600"
+                  />
+                  <span className="text-xs text-gray-500 font-mono">{liquidityToken}</span>
+                </div>
+              </div>
+
+              {/* Save button */}
+              <div className="flex flex-col justify-end">
+                <button
+                  onClick={handleSetLiquidity}
+                  className={`w-full py-2.5 rounded-lg text-sm font-medium transition-all ${
+                    liquiditySaved
+                      ? 'bg-green-600 text-white'
+                      : 'bg-blue-600 hover:bg-blue-700 text-white'
+                  }`}
+                >
+                  {liquiditySaved ? '✓ Updated' : `Set ${liquidityChain} Liquidity`}
+                </button>
+              </div>
+            </div>
+
+            {liquidityAmount && (
+              <div className="mt-4 bg-blue-500/5 border border-blue-500/20 rounded-lg px-4 py-3">
+                <p className="text-xs text-gray-400">
+                  Max payout per order on <span className="text-white font-mono">{liquidityChain}</span>:{' '}
+                  <span className="text-white font-mono font-medium">{parseFloat(liquidityAmount) > 0 ? Math.min(parseFloat(liquidityAmount), 500).toFixed(2) : '0'} {liquidityToken}</span>
+                  <span className="text-gray-500 ml-2">· Remaining balance auto-reserved for pending orders</span>
+                </p>
+              </div>
+            )}
           </div>
         </div>
 
