@@ -1,5 +1,5 @@
 import { ethers } from 'ethers';
-import { TronWeb } from 'tronweb';
+import TronWeb from 'tronweb';
 
 interface SendCryptoParams {
   network: string;

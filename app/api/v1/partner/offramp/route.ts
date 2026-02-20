@@ -133,7 +133,7 @@ export async function POST(request: NextRequest) {
             where: { id: order.id },
             data: {
               status: 'COMPLETED',
-              transactionId: payoutResult.transactionId,
+              transactionId: 'transactionId' in payoutResult ? payoutResult.transactionId : undefined,
               completedAt: new Date(),
             },
           });
@@ -144,7 +144,7 @@ export async function POST(request: NextRequest) {
             where: { id: order.id },
             data: {
               status: 'FAILED',
-              errorMessage: payoutResult.error,
+              errorMessage: 'error' in payoutResult ? payoutResult.error : 'Unknown error',
             },
           });
 

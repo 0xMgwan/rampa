@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/db';
 import { selcomProvider } from '@/lib/payment-providers/selcom';
-import { sendCrypto } from '@/lib/blockchain/send';
+import { BlockchainService } from '@/lib/blockchain';
 
 export async function POST(request: NextRequest) {
   try {
@@ -30,23 +30,30 @@ export async function POST(request: NextRequest) {
         where: { id: order.id },
         data: {
           status: 'PROCESSING',
-          paymentTransactionId: transactionId,
+          transactionId: transactionId,
         },
       });
 
       if (order.type === 'BUY') {
-        const txHash = await sendCrypto({
-          network: order.network,
-          token: order.cryptoCurrency,
-          toAddress: order.destinationAddress!,
-          amount: order.cryptoAmount,
-        });
+        const result = await BlockchainService.sendCrypto(
+          order.network,
+          order.cryptoType,
+          order.destinationAddress!,
+          order.amountCrypto
+        );
+        
+        if (!result.success) {
+          throw new Error(result.error || 'Failed to send crypto');
+        }
+        
+        const txHash = result.txHash;
 
         await prisma.order.update({
           where: { id: order.id },
           data: {
             status: 'COMPLETED',
-            cryptoTransactionHash: txHash,
+            txHash: txHash,
+            completedAt: new Date(),
           },
         });
 

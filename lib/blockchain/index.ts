@@ -57,7 +57,7 @@ export class BlockchainService {
     }
   }
 
-  static async getWalletAddress(network: Network): string {
+  static async getWalletAddress(network: Network): Promise<string> {
     const blockchain = this.getInstance(network);
     return blockchain.getAddress();
   }
