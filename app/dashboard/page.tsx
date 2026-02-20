@@ -1,275 +1,304 @@
+'use client';
 import Link from 'next/link';
-import { ArrowLeft, Key, TrendingUp, Activity, DollarSign, Copy, Check, Globe, Zap, AlertCircle } from 'lucide-react';
+import { useState } from 'react';
+import { Sparkles, ArrowLeft, Copy, Check, TrendingUp, Activity, DollarSign, Zap, RefreshCw, Settings, ChevronDown, ExternalLink } from 'lucide-react';
 
-export default function PartnerDashboard() {
+export default function DashboardPage() {
+  const [copied, setCopied] = useState(false);
+  const [markup, setMarkup] = useState('2.5');
+  const [activeProvider, setActiveProvider] = useState('lipa-number');
+  const [webhookUrl, setWebhookUrl] = useState('');
+  const [rateSaved, setRateSaved] = useState(false);
+
+  const baseRate = 2580;
+  const markupPct = parseFloat(markup) || 0;
+  const effectiveRate = Math.round(baseRate * (1 + markupPct / 100));
+
+  const handleCopy = () => {
+    navigator.clipboard.writeText('sk_test_demo_partner_key_12345');
+    setCopied(true);
+    setTimeout(() => setCopied(false), 2000);
+  };
+
+  const handleSaveRate = () => {
+    setRateSaved(true);
+    setTimeout(() => setRateSaved(false), 2000);
+  };
+
+  const providers = [
+    { id: 'lipa-number', name: 'Lipa Number (All Providers)', account: '70005436', status: 'active', networks: ['M-Pesa', 'Airtel', 'Tigo', 'Halopesa'] },
+    { id: 'mpesa-tz', name: 'M-Pesa Tanzania', account: '1234567', status: 'active', networks: ['M-Pesa'] },
+    { id: 'airtel-tz', name: 'Airtel Money', account: '12345678', status: 'active', networks: ['Airtel'] },
+    { id: 'tigopesa-tz', name: 'Tigo Pesa', account: '123456', status: 'active', networks: ['Tigo'] },
+  ];
+
+  const recentOrders = [
+    { id: 'ORD-20260220-7450', amount: '10 USDT', fiat: '25,800 TZS', status: 'COMPLETED', network: 'BEP20', time: '2 min ago' },
+    { id: 'ORD-20260220-7449', amount: '5 USDT', fiat: '12,900 TZS', status: 'COMPLETED', network: 'TRC20', time: '15 min ago' },
+    { id: 'ORD-20260220-7448', amount: '20 USDT', fiat: '51,600 TZS', status: 'PROCESSING', network: 'BEP20', time: '22 min ago' },
+    { id: 'ORD-20260220-7447', amount: '3 USDT', fiat: '7,740 TZS', status: 'PENDING', network: 'BASE', time: '1 hr ago' },
+    { id: 'ORD-20260220-7446', amount: '50 USDT', fiat: '129,000 TZS', status: 'COMPLETED', network: 'BEP20', time: '2 hr ago' },
+  ];
+
+  const statusColors: Record<string, string> = {
+    COMPLETED: 'text-green-400 bg-green-500/10',
+    PROCESSING: 'text-blue-400 bg-blue-500/10',
+    PENDING: 'text-yellow-400 bg-yellow-500/10',
+    FAILED: 'text-red-400 bg-red-500/10',
+  };
+
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-cyan-900 to-slate-900">
-      <nav className="border-b border-white/10 bg-black/20 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-cyan-400 to-blue-400 bg-clip-text text-transparent flex items-center gap-2 hover:opacity-80 transition-opacity">
-              <ArrowLeft className="w-5 h-5 text-cyan-400" />
-              OnRampa Partner
+    <div className="min-h-screen bg-[#0d1117] text-white">
+      {/* Nav */}
+      <nav className="border-b border-white/5 bg-[#0d1117]/90 backdrop-blur-xl sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-4">
+            <Link href="/" className="flex items-center gap-1.5 text-gray-400 hover:text-white transition-colors text-sm">
+              <ArrowLeft className="w-4 h-4" /> Back
             </Link>
-            <div className="flex items-center gap-4">
-              <span className="text-gray-400 text-sm">Demo Partner</span>
-              <div className="w-10 h-10 rounded-full bg-gradient-to-br from-cyan-500 to-blue-500 flex items-center justify-center text-white font-bold">
-                DP
+            <div className="w-px h-4 bg-white/10" />
+            <div className="flex items-center gap-2">
+              <div className="w-7 h-7 bg-blue-600 rounded-md flex items-center justify-center">
+                <Sparkles className="w-4 h-4 text-white" />
               </div>
+              <span className="text-lg font-semibold tracking-tight">Rampa</span>
+              <span className="text-gray-600">/</span>
+              <span className="text-sm text-gray-400">Partner Dashboard</span>
             </div>
+          </div>
+          <div className="flex items-center gap-3">
+            <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-xs font-bold">DP</div>
+            <span className="text-sm text-gray-400">Demo Partner</span>
           </div>
         </div>
       </nav>
 
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-12">
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-cyan-100 bg-clip-text text-transparent">Partner Dashboard</h1>
-          <p className="text-xl text-gray-400">Monitor your onramp integration and earnings</p>
+      <main className="max-w-7xl mx-auto px-6 py-10 space-y-8">
+
+        {/* Header */}
+        <div>
+          <h1 className="text-3xl font-bold tracking-tight mb-1">Partner Dashboard</h1>
+          <p className="text-gray-400 text-sm">Monitor your integration, manage providers, and customize exchange rates.</p>
         </div>
 
-        {/* Stats Overview */}
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-12">
-          <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 p-6 rounded-2xl border border-green-500/20 backdrop-blur-sm">
-            <div className="flex items-center justify-between mb-4">
-              <DollarSign className="w-8 h-8 text-green-400" />
-              <span className="text-2xl font-bold text-white">$12,450</span>
+        {/* Stats */}
+        <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
+          {[
+            { icon: DollarSign, label: 'Total Volume', value: '$12,450', sub: '+18% this month', color: 'text-green-400', bg: 'bg-green-500/10' },
+            { icon: Activity, label: 'Total Transactions', value: '156', sub: '24 this week', color: 'text-blue-400', bg: 'bg-blue-500/10' },
+            { icon: TrendingUp, label: 'Commission Earned', value: '$374', sub: '3% per transaction', color: 'text-purple-400', bg: 'bg-purple-500/10' },
+            { icon: Zap, label: 'Success Rate', value: '98.7%', sub: 'Excellent performance', color: 'text-orange-400', bg: 'bg-orange-500/10' },
+          ].map(({ icon: Icon, label, value, sub, color, bg }) => (
+            <div key={label} className="bg-[#161b22] border border-white/10 rounded-xl p-5">
+              <div className={`w-9 h-9 ${bg} rounded-lg flex items-center justify-center mb-4`}>
+                <Icon className={`w-5 h-5 ${color}`} />
+              </div>
+              <p className="text-2xl font-bold mb-1">{value}</p>
+              <p className="text-xs text-gray-500 mb-1">{label}</p>
+              <p className={`text-xs ${color}`}>{sub}</p>
             </div>
-            <h3 className="text-gray-400 text-sm">Total Volume</h3>
-            <p className="text-green-400 text-xs mt-1">+18% this month</p>
-          </div>
-
-          <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 p-6 rounded-2xl border border-blue-500/20 backdrop-blur-sm">
-            <div className="flex items-center justify-between mb-4">
-              <Activity className="w-8 h-8 text-blue-400" />
-              <span className="text-2xl font-bold text-white">156</span>
-            </div>
-            <h3 className="text-gray-400 text-sm">Total Transactions</h3>
-            <p className="text-blue-400 text-xs mt-1">24 this week</p>
-          </div>
-
-          <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 p-6 rounded-2xl border border-purple-500/20 backdrop-blur-sm">
-            <div className="flex items-center justify-between mb-4">
-              <TrendingUp className="w-8 h-8 text-purple-400" />
-              <span className="text-2xl font-bold text-white">$374</span>
-            </div>
-            <h3 className="text-gray-400 text-sm">Commission Earned</h3>
-            <p className="text-purple-400 text-xs mt-1">3% per transaction</p>
-          </div>
-
-          <div className="bg-gradient-to-br from-orange-500/10 to-red-500/10 p-6 rounded-2xl border border-orange-500/20 backdrop-blur-sm">
-            <div className="flex items-center justify-between mb-4">
-              <Zap className="w-8 h-8 text-orange-400" />
-              <span className="text-2xl font-bold text-white">98.7%</span>
-            </div>
-            <h3 className="text-gray-400 text-sm">Success Rate</h3>
-            <p className="text-green-400 text-xs mt-1">Excellent performance</p>
-          </div>
+          ))}
         </div>
 
-        {/* API Key Section */}
-        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 backdrop-blur-xl p-8 mb-12">
-          <div className="flex items-center gap-3 mb-6">
-            <Key className="w-6 h-6 text-cyan-400" />
-            <h2 className="text-2xl font-bold text-white">API Credentials</h2>
-          </div>
-          
-          <div className="space-y-4">
-            <div>
-              <label className="text-gray-400 text-sm mb-2 block">API Key</label>
-              <div className="flex items-center gap-3">
-                <div className="flex-1 bg-black/40 border border-white/10 rounded-xl p-4 font-mono text-cyan-300">
-                  sk_test_demo_partner_key_12345
+        {/* Exchange Rates + Provider Switcher */}
+        <div className="grid lg:grid-cols-2 gap-6">
+
+          {/* Exchange Rates */}
+          <div className="bg-[#161b22] border border-white/10 rounded-xl p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-base font-semibold">Exchange Rates</h2>
+                <p className="text-xs text-gray-500 mt-0.5">Base rate from market · Add your markup</p>
+              </div>
+              <button className="flex items-center gap-1.5 text-xs text-gray-400 hover:text-white transition-colors border border-white/10 rounded-lg px-3 py-1.5">
+                <RefreshCw className="w-3.5 h-3.5" /> Refresh
+              </button>
+            </div>
+
+            {/* Live base rates */}
+            <div className="space-y-3 mb-6">
+              {[
+                { pair: 'USDT / TZS', base: '2,580', updated: '2 min ago' },
+                { pair: 'USDC / TZS', base: '2,578', updated: '2 min ago' },
+                { pair: 'USDT / KES', base: '129.5', updated: '2 min ago' },
+              ].map(({ pair, base, updated }) => (
+                <div key={pair} className="flex items-center justify-between bg-[#0d1117] rounded-lg px-4 py-3">
+                  <div>
+                    <p className="text-sm font-mono font-medium">{pair}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">Updated {updated}</p>
+                  </div>
+                  <div className="text-right">
+                    <p className="text-sm font-mono text-white">{base}</p>
+                    <p className="text-xs text-green-400">Live</p>
+                  </div>
                 </div>
-                <button className="bg-cyan-600 hover:bg-cyan-700 text-white p-4 rounded-xl transition-colors">
-                  <Copy className="w-5 h-5" />
+              ))}
+            </div>
+
+            {/* Markup customization */}
+            <div className="border-t border-white/5 pt-5">
+              <p className="text-xs font-semibold text-gray-400 uppercase tracking-widest mb-4">Your Markup</p>
+              <div className="flex items-center gap-3 mb-3">
+                <div className="flex-1 bg-[#0d1117] border border-white/10 rounded-lg px-4 py-3 flex items-center gap-2">
+                  <input
+                    type="number"
+                    value={markup}
+                    onChange={e => setMarkup(e.target.value)}
+                    className="bg-transparent text-white text-sm font-mono w-full outline-none"
+                    step="0.1"
+                    min="0"
+                    max="10"
+                  />
+                  <span className="text-gray-500 text-sm">%</span>
+                </div>
+                <button
+                  onClick={handleSaveRate}
+                  className={`px-4 py-3 rounded-lg text-sm font-medium transition-colors ${rateSaved ? 'bg-green-600 text-white' : 'bg-blue-600 hover:bg-blue-700 text-white'}`}
+                >
+                  {rateSaved ? '✓ Saved' : 'Save'}
                 </button>
               </div>
-              <p className="text-gray-500 text-xs mt-2">Use this key in the X-API-Key header for all API requests</p>
+              <div className="bg-blue-500/5 border border-blue-500/20 rounded-lg px-4 py-3">
+                <p className="text-xs text-gray-400">
+                  Your customers see: <span className="text-white font-mono font-medium">1 USDT = {effectiveRate.toLocaleString()} TZS</span>
+                  <span className="text-blue-400 ml-2">(base {baseRate.toLocaleString()} + {markupPct}% markup)</span>
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Payment Provider Switcher */}
+          <div className="bg-[#161b22] border border-white/10 rounded-xl p-6">
+            <div className="flex items-center justify-between mb-6">
+              <div>
+                <h2 className="text-base font-semibold">Payment Providers</h2>
+                <p className="text-xs text-gray-500 mt-0.5">Select your active payment method</p>
+              </div>
+              <span className="text-xs text-green-400 bg-green-500/10 border border-green-500/20 px-2.5 py-1 rounded-full">{providers.filter(p => p.status === 'active').length} active</span>
             </div>
 
+            <div className="space-y-3">
+              {providers.map(provider => (
+                <button
+                  key={provider.id}
+                  onClick={() => setActiveProvider(provider.id)}
+                  className={`w-full text-left rounded-xl p-4 border transition-all ${
+                    activeProvider === provider.id
+                      ? 'border-blue-500/50 bg-blue-500/5'
+                      : 'border-white/5 bg-[#0d1117] hover:border-white/10'
+                  }`}
+                >
+                  <div className="flex items-center justify-between mb-2">
+                    <div className="flex items-center gap-2">
+                      <div className={`w-2 h-2 rounded-full ${activeProvider === provider.id ? 'bg-blue-400' : 'bg-gray-600'}`} />
+                      <span className="text-sm font-medium">{provider.name}</span>
+                    </div>
+                    {activeProvider === provider.id && (
+                      <span className="text-xs text-blue-400 bg-blue-500/10 px-2 py-0.5 rounded">Active</span>
+                    )}
+                  </div>
+                  <p className="text-xs text-gray-500 ml-4">Account: <span className="font-mono text-gray-400">{provider.account}</span></p>
+                  <div className="flex gap-1.5 ml-4 mt-2 flex-wrap">
+                    {provider.networks.map(n => (
+                      <span key={n} className="text-xs text-gray-500 bg-white/5 px-2 py-0.5 rounded">{n}</span>
+                    ))}
+                  </div>
+                </button>
+              ))}
+            </div>
+          </div>
+        </div>
+
+        {/* API Credentials */}
+        <div className="bg-[#161b22] border border-white/10 rounded-xl p-6">
+          <h2 className="text-base font-semibold mb-5">API Credentials</h2>
+          <div className="grid md:grid-cols-2 gap-6">
             <div>
-              <label className="text-gray-400 text-sm mb-2 block">Webhook URL</label>
-              <div className="flex items-center gap-3">
-                <input 
-                  type="text" 
-                  placeholder="https://your-domain.com/webhooks/onrampa"
-                  className="flex-1 bg-black/40 border border-white/10 rounded-xl p-4 text-white placeholder-gray-500 focus:border-cyan-500 focus:outline-none"
+              <p className="text-xs text-gray-500 mb-2">API Key</p>
+              <div className="flex items-center gap-2">
+                <div className="flex-1 bg-[#0d1117] border border-white/10 rounded-lg px-4 py-3 font-mono text-sm text-gray-300 truncate">
+                  sk_test_demo_partner_key_12345
+                </div>
+                <button
+                  onClick={handleCopy}
+                  className="bg-[#0d1117] border border-white/10 rounded-lg p-3 hover:border-white/20 transition-colors"
+                >
+                  {copied ? <Check className="w-4 h-4 text-green-400" /> : <Copy className="w-4 h-4 text-gray-400" />}
+                </button>
+              </div>
+              <p className="text-xs text-gray-600 mt-2">Use in <code className="text-gray-500">X-API-Key</code> header for all partner API requests</p>
+            </div>
+            <div>
+              <p className="text-xs text-gray-500 mb-2">Webhook URL</p>
+              <div className="flex items-center gap-2">
+                <input
+                  type="url"
+                  value={webhookUrl}
+                  onChange={e => setWebhookUrl(e.target.value)}
+                  placeholder="https://your-domain.com/webhooks/rampa"
+                  className="flex-1 bg-[#0d1117] border border-white/10 rounded-lg px-4 py-3 text-sm text-white placeholder-gray-600 outline-none focus:border-blue-500/50 transition-colors"
                 />
-                <button className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-4 rounded-xl font-semibold transition-colors">
+                <button className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4 py-3 text-sm font-medium transition-colors">
                   Save
                 </button>
               </div>
-              <p className="text-gray-500 text-xs mt-2">We'll send order status updates to this URL</p>
-            </div>
-
-            <div className="grid md:grid-cols-2 gap-4 mt-6">
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-                <h3 className="text-white font-semibold mb-2">Rate Limit</h3>
-                <p className="text-gray-400 text-sm">100 requests per minute</p>
-              </div>
-              <div className="bg-white/5 border border-white/10 rounded-xl p-4">
-                <h3 className="text-white font-semibold mb-2">IP Whitelist</h3>
-                <p className="text-gray-400 text-sm">All IPs allowed (dev mode)</p>
-              </div>
+              <p className="text-xs text-gray-600 mt-2">We'll POST order status updates to this URL</p>
             </div>
           </div>
         </div>
 
-        {/* Recent Transactions */}
-        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 backdrop-blur-xl p-8 mb-12">
-          <div className="flex items-center justify-between mb-6">
-            <div className="flex items-center gap-3">
-              <Activity className="w-6 h-6 text-blue-400" />
-              <h2 className="text-2xl font-bold text-white">Recent Transactions</h2>
-            </div>
-            <Link href="/docs" className="text-cyan-400 hover:text-cyan-300 text-sm font-semibold">
-              View API Docs →
+        {/* Recent Orders */}
+        <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden">
+          <div className="px-6 py-5 border-b border-white/5 flex items-center justify-between">
+            <h2 className="text-base font-semibold">Recent Orders</h2>
+            <Link href="/docs#order-status" className="text-xs text-blue-400 hover:text-blue-300 flex items-center gap-1 transition-colors">
+              View all <ExternalLink className="w-3 h-3" />
             </Link>
           </div>
-
-          <div className="overflow-x-auto">
-            <table className="w-full">
-              <thead>
-                <tr className="border-b border-white/10">
-                  <th className="text-left py-3 px-4 text-gray-400 font-semibold">Order ID</th>
-                  <th className="text-left py-3 px-4 text-gray-400 font-semibold">Type</th>
-                  <th className="text-left py-3 px-4 text-gray-400 font-semibold">Amount</th>
-                  <th className="text-left py-3 px-4 text-gray-400 font-semibold">Status</th>
-                  <th className="text-left py-3 px-4 text-gray-400 font-semibold">Commission</th>
-                  <th className="text-left py-3 px-4 text-gray-400 font-semibold">Date</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                  <td className="py-4 px-4 text-cyan-400 font-mono text-sm">ORD-20260220-1234</td>
-                  <td className="py-4 px-4 text-white">Buy (Onramp)</td>
-                  <td className="py-4 px-4 text-white font-semibold">50 USDT</td>
-                  <td className="py-4 px-4">
-                    <span className="bg-green-500/20 text-green-300 px-3 py-1 rounded-lg text-xs">Completed</span>
-                  </td>
-                  <td className="py-4 px-4 text-green-400 font-semibold">$1.50</td>
-                  <td className="py-4 px-4 text-gray-400 text-sm">2 hours ago</td>
-                </tr>
-                <tr className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                  <td className="py-4 px-4 text-cyan-400 font-mono text-sm">ORD-20260220-1235</td>
-                  <td className="py-4 px-4 text-white">Buy (Onramp)</td>
-                  <td className="py-4 px-4 text-white font-semibold">100 USDC</td>
-                  <td className="py-4 px-4">
-                    <span className="bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-lg text-xs">Pending</span>
-                  </td>
-                  <td className="py-4 px-4 text-gray-400">$0.00</td>
-                  <td className="py-4 px-4 text-gray-400 text-sm">5 hours ago</td>
-                </tr>
-                <tr className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                  <td className="py-4 px-4 text-cyan-400 font-mono text-sm">ORD-20260220-1236</td>
-                  <td className="py-4 px-4 text-white">Sell (Offramp)</td>
-                  <td className="py-4 px-4 text-white font-semibold">75 USDT</td>
-                  <td className="py-4 px-4">
-                    <span className="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-lg text-xs">Processing</span>
-                  </td>
-                  <td className="py-4 px-4 text-gray-400">$0.00</td>
-                  <td className="py-4 px-4 text-gray-400 text-sm">1 day ago</td>
-                </tr>
-                <tr className="border-b border-white/5 hover:bg-white/5 transition-colors">
-                  <td className="py-4 px-4 text-cyan-400 font-mono text-sm">ORD-20260219-8821</td>
-                  <td className="py-4 px-4 text-white">Buy (Onramp)</td>
-                  <td className="py-4 px-4 text-white font-semibold">200 USDT</td>
-                  <td className="py-4 px-4">
-                    <span className="bg-green-500/20 text-green-300 px-3 py-1 rounded-lg text-xs">Completed</span>
-                  </td>
-                  <td className="py-4 px-4 text-green-400 font-semibold">$6.00</td>
-                  <td className="py-4 px-4 text-gray-400 text-sm">2 days ago</td>
-                </tr>
-                <tr className="hover:bg-white/5 transition-colors">
-                  <td className="py-4 px-4 text-cyan-400 font-mono text-sm">ORD-20260218-7745</td>
-                  <td className="py-4 px-4 text-white">Buy (Onramp)</td>
-                  <td className="py-4 px-4 text-white font-semibold">25 USDC</td>
-                  <td className="py-4 px-4">
-                    <span className="bg-green-500/20 text-green-300 px-3 py-1 rounded-lg text-xs">Completed</span>
-                  </td>
-                  <td className="py-4 px-4 text-green-400 font-semibold">$0.75</td>
-                  <td className="py-4 px-4 text-gray-400 text-sm">3 days ago</td>
-                </tr>
-              </tbody>
-            </table>
+          <div className="divide-y divide-white/5">
+            {recentOrders.map(order => (
+              <div key={order.id} className="px-6 py-4 flex items-center justify-between hover:bg-white/[0.02] transition-colors">
+                <div className="flex items-center gap-4">
+                  <div>
+                    <p className="text-sm font-mono text-white">{order.id}</p>
+                    <p className="text-xs text-gray-500 mt-0.5">{order.time}</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-6">
+                  <div className="text-right hidden sm:block">
+                    <p className="text-sm font-medium">{order.amount}</p>
+                    <p className="text-xs text-gray-500">{order.fiat}</p>
+                  </div>
+                  <span className="text-xs font-mono text-gray-500 bg-white/5 px-2 py-1 rounded hidden md:block">{order.network}</span>
+                  <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${statusColors[order.status]}`}>
+                    {order.status}
+                  </span>
+                </div>
+              </div>
+            ))}
           </div>
         </div>
 
-        {/* Integration Status */}
-        <div className="grid md:grid-cols-2 gap-6 mb-12">
-          <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 backdrop-blur-xl p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <Globe className="w-6 h-6 text-green-400" />
-              <h2 className="text-2xl font-bold text-white">Integration Status</h2>
+        {/* Integration Quick Links */}
+        <div className="grid sm:grid-cols-3 gap-4">
+          {[
+            { title: 'API Documentation', desc: 'Full reference for all endpoints', href: '/docs', label: 'View Docs' },
+            { title: 'Get Started Guide', desc: 'Step-by-step integration walkthrough', href: '/get-started', label: 'Read Guide' },
+            { title: 'Test Payment', desc: 'Try a real payment with your Lipa Number', href: '/get-started#verify-payment', label: 'Test Now' },
+          ].map(({ title, desc, href, label }) => (
+            <div key={title} className="bg-[#161b22] border border-white/10 rounded-xl p-5 flex flex-col justify-between">
+              <div>
+                <p className="text-sm font-semibold mb-1">{title}</p>
+                <p className="text-xs text-gray-500 leading-relaxed">{desc}</p>
+              </div>
+              <Link href={href} className="mt-4 inline-flex items-center gap-1.5 text-xs text-blue-400 hover:text-blue-300 transition-colors">
+                {label} <ArrowLeft className="w-3 h-3 rotate-180" />
+              </Link>
             </div>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
-                <div className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-green-400" />
-                  <span className="text-white">API Key Active</span>
-                </div>
-                <span className="bg-green-500/20 text-green-300 px-3 py-1 rounded-lg text-xs">Live</span>
-              </div>
-              <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
-                <div className="flex items-center gap-3">
-                  <Check className="w-5 h-5 text-green-400" />
-                  <span className="text-white">Webhook Configured</span>
-                </div>
-                <span className="bg-green-500/20 text-green-300 px-3 py-1 rounded-lg text-xs">Active</span>
-              </div>
-              <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
-                <div className="flex items-center gap-3">
-                  <AlertCircle className="w-5 h-5 text-yellow-400" />
-                  <span className="text-white">Test Mode</span>
-                </div>
-                <span className="bg-yellow-500/20 text-yellow-300 px-3 py-1 rounded-lg text-xs">Sandbox</span>
-              </div>
-            </div>
-          </div>
-
-          <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 backdrop-blur-xl p-8">
-            <div className="flex items-center gap-3 mb-6">
-              <TrendingUp className="w-6 h-6 text-purple-400" />
-              <h2 className="text-2xl font-bold text-white">Quick Stats</h2>
-            </div>
-            <div className="space-y-4">
-              <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
-                <span className="text-gray-400">Avg. Transaction Size</span>
-                <span className="text-white font-semibold">$79.80</span>
-              </div>
-              <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
-                <span className="text-gray-400">Countries Served</span>
-                <span className="text-white font-semibold">Tanzania, Kenya</span>
-              </div>
-              <div className="flex items-center justify-between p-4 bg-white/5 rounded-xl border border-white/10">
-                <span className="text-gray-400">Supported Networks</span>
-                <span className="text-white font-semibold">BEP20, TRC20, Base</span>
-              </div>
-            </div>
-          </div>
+          ))}
         </div>
 
-        {/* Quick Actions */}
-        <div className="grid md:grid-cols-3 gap-6">
-          <Link href="/docs" className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 p-6 rounded-2xl border border-blue-500/20 backdrop-blur-sm hover:border-blue-500/40 transition-all text-center group">
-            <Activity className="w-12 h-12 text-blue-400 mx-auto mb-4 group-hover:scale-110 transition-transform" />
-            <h3 className="text-white font-semibold mb-2">API Documentation</h3>
-            <p className="text-gray-400 text-sm">Integration guides & examples</p>
-          </Link>
-          
-          <button className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 p-6 rounded-2xl border border-green-500/20 backdrop-blur-sm hover:border-green-500/40 transition-all text-center group">
-            <DollarSign className="w-12 h-12 text-green-400 mx-auto mb-4 group-hover:scale-110 transition-transform" />
-            <h3 className="text-white font-semibold mb-2">Test API</h3>
-            <p className="text-gray-400 text-sm">Try sample requests</p>
-          </button>
-          
-          <button className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 p-6 rounded-2xl border border-purple-500/20 backdrop-blur-sm hover:border-purple-500/40 transition-all text-center group">
-            <Key className="w-12 h-12 text-purple-400 mx-auto mb-4 group-hover:scale-110 transition-transform" />
-            <h3 className="text-white font-semibold mb-2">Generate New Key</h3>
-            <p className="text-gray-400 text-sm">Rotate your API credentials</p>
-          </button>
-        </div>
-      </div>
+      </main>
     </div>
   );
 }
