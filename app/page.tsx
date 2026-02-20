@@ -1,193 +1,260 @@
 import Link from 'next/link';
-import { ArrowRight, Globe, Zap, Shield, Code, Check, Sparkles, Coins, Network } from 'lucide-react';
+import { ArrowRight, Shield, Check, Sparkles } from 'lucide-react';
 
 export default function HomePage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      <nav className="border-b border-white/10 bg-black/20 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <div className="flex justify-between items-center">
-            <div className="flex items-center gap-2">
-              <Sparkles className="w-6 h-6 text-blue-400" />
-              <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">OnRampa</h1>
+    <div className="min-h-screen bg-[#0d1117] text-white">
+
+      {/* Nav */}
+      <nav className="border-b border-white/5 bg-[#0d1117]/90 backdrop-blur-xl sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <div className="w-7 h-7 bg-blue-600 rounded-md flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-white" />
             </div>
-            <div className="flex gap-6">
-              <Link href="/docs" className="text-gray-300 hover:text-white transition-colors">
-                Documentation
-              </Link>
-              <Link href="/api/v1/partner/rates?country=TZ" className="text-gray-300 hover:text-white transition-colors">
-                API
-              </Link>
-            </div>
+            <span className="text-lg font-semibold tracking-tight">Rampa</span>
+          </div>
+          <div className="flex items-center gap-8">
+            <Link href="/docs" className="text-sm text-gray-400 hover:text-white transition-colors">Docs</Link>
+            <Link href="/get-started" className="text-sm text-gray-400 hover:text-white transition-colors">Get Started</Link>
+            <Link href="/get-started" className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">
+              Create account
+            </Link>
           </div>
         </div>
       </nav>
 
-      <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-20">
-        <div className="text-center mb-20">
-          <div className="inline-block mb-4 px-4 py-2 bg-blue-500/10 border border-blue-500/20 rounded-full">
-            <span className="text-blue-400 text-sm font-medium">🚀 Production Ready • Multi-Country Support</span>
+      {/* Hero */}
+      <section className="max-w-7xl mx-auto px-6 pt-20 pb-16 grid lg:grid-cols-2 gap-16 items-start">
+        {/* Left */}
+        <div>
+          <div className="inline-flex items-center gap-2 border border-white/10 rounded-full px-4 py-1.5 text-sm text-gray-400 mb-8">
+            <Shield className="w-4 h-4 text-blue-400" />
+            For banks, fintechs &amp; PSPs
           </div>
-          <h2 className="text-6xl md:text-7xl font-bold mb-6 bg-gradient-to-r from-white via-blue-100 to-cyan-100 bg-clip-text text-transparent leading-tight">
-            Fiat to Crypto
-            <br />
-            <span className="bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent">Onramp API</span>
-          </h2>
-          <p className="text-xl text-gray-300 mb-10 max-w-3xl mx-auto leading-relaxed">
-            Enterprise-grade USDC/USDT onramp and offramp API. Customizable for any country.
-            Integrate mobile money payments with blockchain in minutes.
+          <h1 className="text-5xl font-bold leading-tight mb-6 tracking-tight">
+            Get started with the<br />
+            <span className="text-white">Rampa integration</span>
+          </h1>
+          <p className="text-gray-400 text-lg leading-relaxed mb-10 max-w-lg">
+            Rampa is a B2B2C payment infrastructure layer. Banks, fintechs, and payment service providers use our APIs to initiate cross-border payouts, while Rampa manages orchestration, digital-asset token settlement, and downstream fiat delivery.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Link
-              href="/docs"
-              className="bg-gradient-to-r from-blue-600 to-cyan-600 text-white px-8 py-4 rounded-xl font-semibold hover:from-blue-700 hover:to-cyan-700 flex items-center justify-center gap-2 shadow-lg shadow-blue-500/50 transition-all"
-            >
-              Get Started <ArrowRight className="w-5 h-5" />
+          <div className="flex items-center gap-6 mb-12">
+            <Link href="/get-started" className="inline-flex items-center gap-2 bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-colors">
+              Create an account <ArrowRight className="w-4 h-4" />
             </Link>
-            <Link
-              href="/docs"
-              className="bg-white/10 backdrop-blur-sm text-white px-8 py-4 rounded-xl font-semibold border border-white/20 hover:bg-white/20 transition-all"
-            >
-              View Documentation
+            <Link href="/docs" className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 text-sm transition-colors">
+              Skip to authenticated API docs <ArrowRight className="w-4 h-4" />
             </Link>
           </div>
-          
-          <div className="mt-12 flex flex-wrap justify-center gap-8 text-sm text-gray-400">
+          <div className="flex items-center gap-8 text-sm text-gray-500">
             <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-400" />
-              <span>4 Blockchain Networks</span>
+              <div className="w-4 h-4 rounded-full border border-gray-600 flex items-center justify-center">
+                <div className="w-1.5 h-1.5 bg-gray-500 rounded-full" />
+              </div>
+              Omni-channel payment layer
             </div>
             <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-400" />
-              <span>3 Countries</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-400" />
-              <span>RESTful API</span>
-            </div>
-            <div className="flex items-center gap-2">
-              <Check className="w-4 h-4 text-green-400" />
-              <span>Webhook Support</span>
+              <div className="w-4 h-4 rounded-full border border-gray-600 flex items-center justify-center">
+                <div className="w-1.5 h-1.5 bg-gray-500 rounded-full" />
+              </div>
+              Pay anywhere, settle everywhere
             </div>
           </div>
         </div>
 
-        <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6 mb-20">
-          <div className="bg-gradient-to-br from-blue-500/10 to-cyan-500/10 p-6 rounded-2xl border border-blue-500/20 backdrop-blur-sm hover:border-blue-500/40 transition-all group">
-            <div className="bg-blue-500/20 w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <Globe className="w-7 h-7 text-blue-400" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Multi-Country</h3>
-            <p className="text-gray-400 leading-relaxed">
-              Support for Tanzania, Kenya, Uganda, and easily add more countries
-            </p>
-          </div>
-
-          <div className="bg-gradient-to-br from-purple-500/10 to-pink-500/10 p-6 rounded-2xl border border-purple-500/20 backdrop-blur-sm hover:border-purple-500/40 transition-all group">
-            <div className="bg-purple-500/20 w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <Zap className="w-7 h-7 text-purple-400" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Fast Integration</h3>
-            <p className="text-gray-400 leading-relaxed">
-              RESTful API with comprehensive documentation and SDKs
-            </p>
-          </div>
-
-          <div className="bg-gradient-to-br from-green-500/10 to-emerald-500/10 p-6 rounded-2xl border border-green-500/20 backdrop-blur-sm hover:border-green-500/40 transition-all group">
-            <div className="bg-green-500/20 w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <Shield className="w-7 h-7 text-green-400" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Secure & Reliable</h3>
-            <p className="text-gray-400 leading-relaxed">
-              API key authentication, IP whitelisting, and webhook signatures
-            </p>
-          </div>
-
-          <div className="bg-gradient-to-br from-orange-500/10 to-red-500/10 p-6 rounded-2xl border border-orange-500/20 backdrop-blur-sm hover:border-orange-500/40 transition-all group">
-            <div className="bg-orange-500/20 w-14 h-14 rounded-xl flex items-center justify-center mb-4 group-hover:scale-110 transition-transform">
-              <Code className="w-7 h-7 text-orange-400" />
-            </div>
-            <h3 className="text-xl font-semibold mb-2 text-white">Developer Friendly</h3>
-            <p className="text-gray-400 leading-relaxed">
-              Clear API responses, detailed error messages, and sandbox mode
-            </p>
-          </div>
-        </div>
-
-        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 backdrop-blur-xl p-10">
-          <h3 className="text-3xl font-bold mb-8 text-white">Supported Features</h3>
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Coins className="w-5 h-5 text-blue-400" />
-                <h4 className="font-semibold text-lg text-white">Payment Methods</h4>
+        {/* Right - Integration panel */}
+        <div className="bg-[#161b22] border border-white/10 rounded-2xl p-6">
+          <p className="text-xs font-semibold text-blue-400 tracking-widest uppercase mb-5">Integration at a glance</p>
+          <div className="space-y-4">
+            {/* Step 1 */}
+            <div className="border border-blue-500/40 bg-blue-500/5 rounded-xl p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-2 h-2 bg-blue-500 rounded-full" />
+                <span className="text-sm font-medium text-white">Initiate a payment order</span>
               </div>
-              <ul className="space-y-3 text-gray-300">
-                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> M-Pesa (TZ & KE)</li>
-                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> Tigo Pesa</li>
-                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> Airtel Money</li>
-                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> Halo Pesa</li>
-              </ul>
-            </div>
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Network className="w-5 h-5 text-purple-400" />
-                <h4 className="font-semibold text-lg text-white">Blockchain Networks</h4>
+              <p className="text-xs text-gray-400 mb-4 leading-relaxed">
+                Your backend creates a payment order with amount, corridor, and recipient details. Rampa assigns the optimal route behind the scenes.
+              </p>
+              <div className="bg-[#0d1117] rounded-lg p-4 font-mono text-xs text-gray-300 leading-relaxed">
+                <span className="text-blue-400">POST</span> /api/v1/partner/onramp<br />
+                <span className="text-gray-500">X-API-Key: YOUR_API_KEY</span><br />
+                <span className="text-gray-500">Content-Type: application/json</span><br />
+                <br />
+                {'{'}<br />
+                &nbsp;&nbsp;<span className="text-green-400">"amount_usdt"</span>: <span className="text-yellow-400">10</span>,<br />
+                &nbsp;&nbsp;<span className="text-green-400">"network"</span>: <span className="text-orange-400">"BEP20"</span>,<br />
+                &nbsp;&nbsp;<span className="text-green-400">"payment_method_id"</span>: <span className="text-orange-400">"lipa-number"</span>,<br />
+                &nbsp;&nbsp;<span className="text-green-400">"destination_address"</span>: <span className="text-orange-400">"0xABC..."</span><br />
+                {'}'}
               </div>
-              <ul className="space-y-3 text-gray-300">
-                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> BEP20 (BSC)</li>
-                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> TRC20 (Tron)</li>
-                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> Base (Coinbase)</li>
-                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> Polygon</li>
-              </ul>
             </div>
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Sparkles className="w-5 h-5 text-cyan-400" />
-                <h4 className="font-semibold text-lg text-white">Cryptocurrencies</h4>
+
+            {/* Step 2 */}
+            <div className="border border-white/5 rounded-xl p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-2 h-2 bg-gray-600 rounded-full" />
+                <span className="text-sm font-medium text-white">Use one API, multiple fulfillment rails</span>
               </div>
-              <ul className="space-y-3 text-gray-300">
-                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> USDC</li>
-                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> USDT</li>
-              </ul>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                You integrate once with Rampa. We handle routing across M-Pesa, Airtel Money, Tigo Pesa, and Halopesa — with automatic USDT settlement.
+              </p>
             </div>
-            <div>
-              <div className="flex items-center gap-2 mb-4">
-                <Code className="w-5 h-5 text-orange-400" />
-                <h4 className="font-semibold text-lg text-white">API Features</h4>
+
+            {/* Step 3 */}
+            <div className="border border-white/5 rounded-xl p-5">
+              <div className="flex items-center gap-2 mb-2">
+                <div className="w-2 h-2 bg-gray-600 rounded-full" />
+                <span className="text-sm font-medium text-white">Compliance-friendly wording</span>
               </div>
-              <ul className="space-y-3 text-gray-300">
-                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> Real-time rates</li>
-                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> Webhooks</li>
-                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> Order tracking</li>
-                <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> Rate limiting</li>
-              </ul>
+              <p className="text-xs text-gray-400 leading-relaxed">
+                The platform abstracts digital-asset tokens used for settlement so banks and regulators see a clean, fiat-first experience in dashboards and reports.
+              </p>
             </div>
           </div>
         </div>
+      </section>
 
-        <div className="mt-20 bg-gradient-to-r from-blue-600 via-cyan-600 to-blue-600 text-white rounded-2xl p-12 text-center relative overflow-hidden">
-          <div className="absolute inset-0 bg-[url('data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMjAwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48ZGVmcz48cGF0dGVybiBpZD0iZ3JpZCIgd2lkdGg9IjQwIiBoZWlnaHQ9IjQwIiBwYXR0ZXJuVW5pdHM9InVzZXJTcGFjZU9uVXNlIj48cGF0aCBkPSJNIDQwIDAgTCAwIDAgMCA0MCIgZmlsbD0ibm9uZSIgc3Ryb2tlPSJ3aGl0ZSIgc3Ryb2tlLW9wYWNpdHk9IjAuMSIgc3Ryb2tlLXdpZHRoPSIxIi8+PC9wYXR0ZXJuPjwvZGVmcz48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSJ1cmwoI2dyaWQpIi8+PC9zdmc+')] opacity-30"></div>
-          <div className="relative z-10">
-            <h3 className="text-4xl font-bold mb-4">Ready to get started?</h3>
-            <p className="text-xl mb-8 opacity-90 max-w-2xl mx-auto">
-              Check out our documentation to integrate OnRampa into your application and start accepting payments today
-            </p>
-            <Link
-              href="/docs"
-              className="inline-block bg-white text-blue-600 px-10 py-4 rounded-xl font-semibold hover:bg-gray-100 shadow-xl transition-all"
-            >
-              View Documentation →
-            </Link>
-          </div>
-        </div>
-      </main>
-
-      <footer className="border-t border-white/10 bg-black/20 backdrop-blur-xl mt-20">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <p className="text-center text-gray-400">
-            © 2026 OnRampa. Open-source fiat-to-crypto onramp API.
+      {/* Who Rampa is for */}
+      <section className="max-w-7xl mx-auto px-6 py-20 border-t border-white/5">
+        <div className="grid lg:grid-cols-2 gap-8 mb-12">
+          <h2 className="text-3xl font-bold tracking-tight">Who Rampa is for</h2>
+          <p className="text-gray-400 leading-relaxed">
+            Start with the track that matches your role. The underlying APIs are the same; what changes is how you expose them to your customers and how revenue is shared.
           </p>
+        </div>
+
+        <div className="grid md:grid-cols-3 gap-6">
+          {/* Card 1 */}
+          <div className="bg-[#161b22] border border-white/10 rounded-xl p-6">
+            <div className="flex items-center gap-2 mb-5">
+              <div className="w-2 h-2 bg-green-400 rounded-full" />
+              <span className="text-xs font-semibold text-gray-400 tracking-widest uppercase">Senders</span>
+            </div>
+            <h3 className="text-lg font-semibold mb-3">Banks &amp; Financial Institutions</h3>
+            <p className="text-sm text-gray-400 leading-relaxed mb-5">
+              Offer cross-border payouts to your customers without building settlement rails from scratch. Rampa acts as the orchestration and settlement layer behind your existing channels.
+            </p>
+            <ul className="space-y-2 mb-6">
+              {['Initiate cross-border payouts via a simple REST API', 'Keep full control of pricing and markup', 'White-label experience for web and mobile channels'].map(item => (
+                <li key={item} className="flex items-start gap-2 text-sm text-gray-300">
+                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <Link href="/get-started" className="inline-flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300 transition-colors">
+              View integration steps <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {/* Card 2 */}
+          <div className="bg-[#161b22] border border-white/10 rounded-xl p-6">
+            <div className="flex items-center gap-2 mb-5">
+              <div className="w-2 h-2 bg-green-400 rounded-full" />
+              <span className="text-xs font-semibold text-gray-400 tracking-widest uppercase">B2B2C</span>
+            </div>
+            <h3 className="text-lg font-semibold mb-3">Fintechs &amp; Platforms</h3>
+            <p className="text-sm text-gray-400 leading-relaxed mb-5">
+              Embed cross-border settlement flows into your product. Use Rampa as the payment fabric while you own the end-customer relationship.
+            </p>
+            <ul className="space-y-2 mb-6">
+              {['Server-side APIs for initiating and tracking payment orders', 'Webhook-first design for status and reconciliation', 'Multi-tenant friendly for marketplaces and platforms'].map(item => (
+                <li key={item} className="flex items-start gap-2 text-sm text-gray-300">
+                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <Link href="/get-started" className="inline-flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300 transition-colors">
+              View integration steps <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+
+          {/* Card 3 */}
+          <div className="bg-[#161b22] border border-white/10 rounded-xl p-6">
+            <div className="flex items-center gap-2 mb-5">
+              <div className="w-2 h-2 bg-green-400 rounded-full" />
+              <span className="text-xs font-semibold text-gray-400 tracking-widest uppercase">Providers</span>
+            </div>
+            <h3 className="text-lg font-semibold mb-3">PSPs &amp; Liquidity Providers</h3>
+            <p className="text-sm text-gray-400 leading-relaxed mb-5">
+              Plug your payout infrastructure into Rampa to receive order flow from banks and platforms.
+            </p>
+            <ul className="space-y-2 mb-6">
+              {['Expose your fiat corridors and limits via a single integration', 'Receive assigned orders with full metadata', 'Track commissions and settlement performance'].map(item => (
+                <li key={item} className="flex items-start gap-2 text-sm text-gray-300">
+                  <div className="w-1.5 h-1.5 bg-blue-400 rounded-full mt-1.5 flex-shrink-0" />
+                  {item}
+                </li>
+              ))}
+            </ul>
+            <Link href="/get-started" className="inline-flex items-center gap-1 text-sm text-blue-400 hover:text-blue-300 transition-colors">
+              View integration steps <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* Step-by-step integration */}
+      <section className="max-w-7xl mx-auto px-6 py-20 border-t border-white/5">
+        <h2 className="text-3xl font-bold tracking-tight mb-3">Step-by-step integration</h2>
+        <p className="text-gray-400 mb-10 max-w-2xl">
+          Choose the track that matches your role. Each guide walks through authentication, creating a payment order, handling webhooks, and reconciling payouts across mobile money and blockchain rails.
+        </p>
+
+        <div className="grid lg:grid-cols-2 gap-6">
+          {/* Left panel */}
+          <div className="bg-[#161b22] border border-white/10 rounded-xl p-6">
+            <h3 className="text-base font-semibold mb-5">Banks &amp; Financial Institutions – server-side flow</h3>
+            <ol className="space-y-4">
+              {[
+                { n: 1, bold: 'Create an API key in Settings → API Keys', rest: ' (test first, then live).' },
+                { n: 2, bold: 'Call the Payment Orders API', rest: ' from your core banking backend or integration layer.' },
+                { n: 3, bold: 'Fund the route', rest: ' using your chosen settlement method (mobile money or blockchain).' },
+                { n: 4, bold: 'Listen to webhooks', rest: ' to update customer-facing channels and back-office systems.' },
+              ].map(({ n, bold, rest }) => (
+                <li key={n} className="flex items-start gap-3 text-sm text-gray-300">
+                  <span className="text-gray-600 font-mono mt-0.5">{n}.</span>
+                  <span><strong className="text-white font-medium">{bold}</strong>{rest}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+
+          {/* Right panel */}
+          <div className="bg-[#161b22] border border-white/10 rounded-xl p-6">
+            <h3 className="text-base font-semibold mb-2">Common lifecycle &amp; webhook example</h3>
+            <p className="text-sm text-gray-400 mb-5 leading-relaxed">
+              Regardless of the track, every integration follows the same pattern: create an order, fund it, receive status updates, and reconcile.
+            </p>
+            <div className="bg-[#0d1117] rounded-lg p-4 font-mono text-xs text-gray-300 leading-relaxed">
+              <span className="text-gray-500">{'// Example webhook payload (order.completed)'}</span><br />
+              {'{'}<br />
+              &nbsp;&nbsp;<span className="text-green-400">"event"</span>: <span className="text-orange-400">"order.completed"</span>,<br />
+              &nbsp;&nbsp;<span className="text-green-400">"order_number"</span>: <span className="text-orange-400">"ORD-20260220-7450"</span>,<br />
+              &nbsp;&nbsp;<span className="text-green-400">"status"</span>: <span className="text-orange-400">"COMPLETED"</span>,<br />
+              &nbsp;&nbsp;<span className="text-green-400">"amount_crypto"</span>: <span className="text-yellow-400">10</span>,<br />
+              &nbsp;&nbsp;<span className="text-green-400">"currency"</span>: <span className="text-orange-400">"USDT"</span>,<br />
+              &nbsp;&nbsp;<span className="text-green-400">"network"</span>: <span className="text-orange-400">"BEP20"</span>,<br />
+              &nbsp;&nbsp;<span className="text-green-400">"tx_hash"</span>: <span className="text-orange-400">"0x5ab827..."</span>,<br />
+              &nbsp;&nbsp;<span className="text-green-400">"timestamp"</span>: <span className="text-orange-400">"2026-02-20T12:35:00Z"</span><br />
+              {'}'}
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Footer */}
+      <footer className="border-t border-white/5 mt-10">
+        <div className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
+          <div className="flex items-center gap-2">
+            <div className="w-5 h-5 bg-blue-600 rounded flex items-center justify-center">
+              <Sparkles className="w-3 h-3 text-white" />
+            </div>
+            <span className="text-sm text-gray-500">Rampa</span>
+          </div>
+          <p className="text-sm text-gray-600">© 2026 Rampa. Open-source fiat-to-crypto onramp API.</p>
         </div>
       </footer>
     </div>

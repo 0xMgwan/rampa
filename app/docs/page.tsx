@@ -1,228 +1,256 @@
 import Link from 'next/link';
-import { ArrowLeft, Copy, Check } from 'lucide-react';
+import { Sparkles } from 'lucide-react';
 
 export default function DocsPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-br from-slate-900 via-blue-900 to-slate-900">
-      <nav className="border-b border-white/10 bg-black/20 backdrop-blur-xl sticky top-0 z-50">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
-          <Link href="/" className="text-2xl font-bold bg-gradient-to-r from-blue-400 to-cyan-400 bg-clip-text text-transparent flex items-center gap-2 hover:opacity-80 transition-opacity">
-            <ArrowLeft className="w-5 h-5 text-blue-400" />
-            OnRampa
+    <div className="min-h-screen bg-[#0d1117] text-white">
+      <nav className="border-b border-white/5 bg-[#0d1117]/90 backdrop-blur-xl sticky top-0 z-50">
+        <div className="max-w-7xl mx-auto px-6 py-4 flex justify-between items-center">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-7 h-7 bg-blue-600 rounded-md flex items-center justify-center">
+              <Sparkles className="w-4 h-4 text-white" />
+            </div>
+            <span className="text-lg font-semibold tracking-tight">Rampa</span>
           </Link>
+          <div className="flex items-center gap-8">
+            <Link href="/docs" className="text-sm text-white font-medium">Docs</Link>
+            <Link href="/get-started" className="text-sm text-gray-400 hover:text-white transition-colors">Get Started</Link>
+            <Link href="/get-started" className="text-sm bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg transition-colors">Create account</Link>
+          </div>
         </div>
       </nav>
 
-      <div className="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="mb-12">
-          <h1 className="text-5xl font-bold mb-4 bg-gradient-to-r from-white to-blue-100 bg-clip-text text-transparent">API Documentation</h1>
-          <p className="text-xl text-gray-400">Complete guide to integrating OnRampa into your application</p>
-        </div>
-
-        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 backdrop-blur-xl p-8 mb-8">
-          <h2 className="text-3xl font-bold mb-4 text-white">Authentication</h2>
-          <p className="text-gray-300 mb-6 text-lg">
-            All API requests require your API key in the <code className="bg-blue-500/20 text-blue-300 px-3 py-1 rounded-lg font-mono text-sm">X-API-Key</code> header.
-          </p>
-          <div className="relative">
-            <pre className="bg-black/40 border border-white/10 text-gray-100 p-6 rounded-xl overflow-x-auto">
-<code className="text-sm">{`curl https://your-domain.com/api/v1/partner/rates \\
-  -H "X-API-Key: sk_live_your_api_key"`}</code>
-            </pre>
+      <div className="max-w-7xl mx-auto px-6 py-12 grid lg:grid-cols-[240px_1fr] gap-12">
+        <aside className="hidden lg:block">
+          <div className="sticky top-24 space-y-6 text-sm">
+            {[
+              { title: 'Overview', items: ['Introduction', 'Authentication', 'Errors'] },
+              { title: 'Onramp', items: ['Payment Methods', 'Exchange Rates', 'Create Order', 'Order Status'] },
+              { title: 'Verification', items: ['Verify Payment (Public)', 'Verify Payment (Partner)'] },
+              { title: 'Webhooks', items: ['Webhook Events', 'Webhook Security'] },
+            ].map(({ title, items }) => (
+              <div key={title}>
+                <p className="text-xs font-semibold text-gray-500 uppercase tracking-widest mb-3">{title}</p>
+                <ul className="space-y-1">
+                  {items.map(item => (
+                    <li key={item}><a href={`#${item.toLowerCase().replace(/[^a-z]/g, '-')}`} className="text-gray-400 hover:text-white transition-colors block py-1">{item}</a></li>
+                  ))}
+                </ul>
+              </div>
+            ))}
           </div>
-        </div>
+        </aside>
 
-        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 backdrop-blur-xl p-8 mb-8">
-          <h2 className="text-3xl font-bold mb-4 text-white">Base URL</h2>
-          <pre className="bg-black/40 border border-white/10 text-cyan-300 p-4 rounded-xl font-mono text-lg">
-https://your-domain.com/api/v1/partner
-          </pre>
-        </div>
+        <main className="min-w-0 space-y-16">
 
-        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 backdrop-blur-xl p-8 mb-8">
-          <h2 className="text-3xl font-bold mb-4 text-white">Get Exchange Rates</h2>
-          <p className="text-gray-300 mb-6 text-lg">
-            Retrieve current USDC/USDT exchange rates for a specific country.
-          </p>
-          <div className="mb-6 flex items-center gap-3">
-            <span className="bg-green-500/20 text-green-300 px-4 py-2 rounded-lg font-mono text-sm font-bold border border-green-500/30">GET</span>
-            <span className="font-mono text-gray-300 text-lg">/rates?country=TZ</span>
-          </div>
-          <div className="mb-3 text-sm text-gray-400 font-semibold">Response:</div>
-          <pre className="bg-black/40 border border-white/10 text-gray-100 p-6 rounded-xl overflow-x-auto mb-4">
-{`{
-  "success": true,
-  "rates": {
-    "buy_rate_usdc": 2580,
-    "sell_rate_usdc": 2520,
-    "buy_rate_usdt": 2580,
-    "sell_rate_usdt": 2520
-  },
-  "limits": {
-    "min_usdc": 1,
-    "max_usdc": 10000,
-    "min_usdt": 1,
-    "max_usdt": 10000
-  },
-  "currency": "TZS"
-}`}
-          </pre>
-        </div>
+          <section id="introduction">
+            <div className="inline-flex items-center border border-white/10 rounded-full px-3 py-1 text-xs text-gray-400 mb-6">API Reference v1</div>
+            <h1 className="text-4xl font-bold tracking-tight mb-4">API Documentation</h1>
+            <p className="text-gray-400 text-lg leading-relaxed mb-6">The Rampa API lets you integrate mobile money onramp and offramp into your application. Accept M-Pesa, Airtel Money, Tigo Pesa, and Halopesa — settle automatically in USDT/USDC on BEP20, TRC20, Base, or Polygon.</p>
+            <div className="grid sm:grid-cols-3 gap-4">
+              {[['Base URL', 'rampa-production.up.railway.app'], ['Version', 'v1'], ['Auth', 'X-API-Key header']].map(([label, value]) => (
+                <div key={label} className="bg-[#161b22] border border-white/10 rounded-lg p-4">
+                  <p className="text-xs text-gray-500 mb-1">{label}</p>
+                  <p className="text-sm font-mono text-white">{value}</p>
+                </div>
+              ))}
+            </div>
+          </section>
 
-        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 backdrop-blur-xl p-8 mb-8">
-          <h2 className="text-3xl font-bold mb-4 text-white">Get Payment Methods</h2>
-          <p className="text-gray-300 mb-6 text-lg">
-            Get the list of active payment methods for a country.
-          </p>
-          <div className="mb-6 flex items-center gap-3">
-            <span className="bg-green-500/20 text-green-300 px-4 py-2 rounded-lg font-mono text-sm font-bold border border-green-500/30">GET</span>
-            <span className="font-mono text-gray-300 text-lg">/payment-methods?country=TZ</span>
-          </div>
-          <div className="mb-3 text-sm text-gray-400 font-semibold">Response:</div>
-          <pre className="bg-black/40 border border-white/10 text-gray-100 p-6 rounded-xl overflow-x-auto">
-{`{
-  "success": true,
-  "payment_methods": [
-    {
-      "id": "mpesa-tz",
-      "provider": "M-Pesa Tanzania",
-      "type": "mobile_money",
-      "account_number": "1234567",
-      "account_name": "ONRAMPA LTD",
-      "instructions": "Dial *150*00#..."
-    }
-  ]
-}`}
-          </pre>
-        </div>
+          <section id="authentication">
+            <h2 className="text-2xl font-bold tracking-tight mb-4">Authentication</h2>
+            <p className="text-gray-400 mb-6 leading-relaxed">All partner API requests require an API key in the <code className="bg-white/5 text-blue-300 px-1.5 py-0.5 rounded text-xs font-mono">X-API-Key</code> header. Public endpoints (customer payment verification) require no auth.</p>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500 font-mono">Request header</span></div>
+              <div className="p-5 font-mono text-sm"><span className="text-gray-500">X-API-Key: </span><span className="text-orange-400">sk_live_your_api_key_here</span></div>
+            </div>
+          </section>
 
-        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 backdrop-blur-xl p-8 mb-8">
-          <h2 className="text-3xl font-bold mb-4 text-white">Create Buy Order (Onramp)</h2>
-          <p className="text-gray-300 mb-6 text-lg">
-            Create an order for your user to purchase USDC/USDT with fiat.
-          </p>
-          <div className="mb-6 flex items-center gap-3">
-            <span className="bg-blue-500/20 text-blue-300 px-4 py-2 rounded-lg font-mono text-sm font-bold border border-blue-500/30">POST</span>
-            <span className="font-mono text-gray-300 text-lg">/onramp</span>
-          </div>
-          <div className="mb-3 text-sm text-gray-400 font-semibold">Request Body:</div>
-          <pre className="bg-black/40 border border-white/10 text-gray-100 p-6 rounded-xl overflow-x-auto mb-6">
-{`{
-  "partner_order_id": "ORD-12345",
-  "amount_usdt": 50,
-  "destination_address": "0x742d35Cc6634C0532925a3b844Bc454e4438f44e",
-  "payment_method_id": "mpesa-tz",
-  "user_full_name": "John Doe",
-  "user_phone": "0765123456",
-  "network": "BEP20",
-  "country_code": "TZ"
-}`}
-          </pre>
-          <div className="mb-3 text-sm text-gray-400 font-semibold">Response:</div>
-          <pre className="bg-black/40 border border-white/10 text-gray-100 p-6 rounded-xl overflow-x-auto">
-{`{
-  "success": true,
-  "order": {
-    "order_number": "ORD-20260220-1234",
-    "status": "pending",
-    "amount_crypto": 50,
-    "amount_fiat": 129000,
-    "payment_instructions": {
-      "provider": "M-Pesa Tanzania",
-      "account_number": "1234567",
-      "amount_to_send": 129000,
-      "instructions": "Dial *150*00#..."
-    },
-    "expires_at": "2026-02-20T12:00:00Z"
-  }
-}`}
-          </pre>
-        </div>
+          <section id="payment-methods">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="bg-green-500/10 text-green-400 text-xs font-semibold px-2.5 py-1 rounded-md border border-green-500/20 font-mono">GET</span>
+              <h2 className="text-2xl font-bold tracking-tight">Payment Methods</h2>
+            </div>
+            <p className="text-gray-400 mb-4">Returns active payment methods for a country.</p>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden mb-4">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500 font-mono">GET /api/v1/partner/payment-methods?country_code=TZ</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                <span className="text-gray-500">curl </span><span className="text-orange-400">'https://rampa-production.up.railway.app/api/v1/partner/payment-methods?country_code=TZ'</span> \<br/>
+                &nbsp;&nbsp;<span className="text-gray-500">-H </span><span className="text-green-400">'X-API-Key: sk_live_your_key'</span>
+              </div>
+            </div>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500">Response 200</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                {'{'}<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"success"</span>: <span className="text-blue-400">true</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"payment_methods"</span>: [{'{'}<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"id"</span>: <span className="text-orange-400">"lipa-number"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"provider"</span>: <span className="text-orange-400">"Lipa Number (All Providers)"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"account_number"</span>: <span className="text-orange-400">"70005436"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"limits"</span>: {'{'} <span className="text-green-400">"min"</span>: <span className="text-yellow-400">1000</span>, <span className="text-green-400">"max"</span>: <span className="text-yellow-400">10000000</span> {'}'}<br/>
+                &nbsp;&nbsp;{'}'}]<br/>
+                {'}'}
+              </div>
+            </div>
+          </section>
 
-        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 backdrop-blur-xl p-8 mb-8">
-          <h2 className="text-3xl font-bold mb-4 text-white">Verify Payment</h2>
-          <p className="text-gray-300 mb-6 text-lg">
-            Submit the mobile money transaction ID to verify payment and trigger crypto delivery.
-          </p>
-          <div className="mb-6 flex items-center gap-3">
-            <span className="bg-blue-500/20 text-blue-300 px-4 py-2 rounded-lg font-mono text-sm font-bold border border-blue-500/30">POST</span>
-            <span className="font-mono text-gray-300 text-lg">/onramp/verify</span>
-          </div>
-          <div className="mb-3 text-sm text-gray-400 font-semibold">Request Body:</div>
-          <pre className="bg-black/40 border border-white/10 text-gray-100 p-6 rounded-xl overflow-x-auto">
-{`{
-  "order_number": "ORD-20260220-1234",
-  "transaction_id": "ABC123XYZ"
-}`}
-          </pre>
-        </div>
+          <section id="create-order">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="bg-blue-500/10 text-blue-400 text-xs font-semibold px-2.5 py-1 rounded-md border border-blue-500/20 font-mono">POST</span>
+              <h2 className="text-2xl font-bold tracking-tight">Create Order (Onramp)</h2>
+            </div>
+            <p className="text-gray-400 mb-6 leading-relaxed">Creates a buy order. Returns payment instructions. Once the customer pays and verifies, USDT/USDC is automatically sent to their wallet.</p>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden mb-4">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500 font-mono">POST /api/v1/partner/onramp</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                {'{'}<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"amount_usdt"</span>: <span className="text-yellow-400">10</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"destination_address"</span>: <span className="text-orange-400">"0xYourWalletAddress"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"payment_method_id"</span>: <span className="text-orange-400">"lipa-number"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"user_phone"</span>: <span className="text-orange-400">"255765123456"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"network"</span>: <span className="text-orange-400">"BEP20"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"country_code"</span>: <span className="text-orange-400">"TZ"</span><br/>
+                {'}'}
+              </div>
+            </div>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden mb-4">
+              <table className="w-full text-sm">
+                <thead><tr className="border-b border-white/5">
+                  {['Parameter','Type','Required','Description'].map(h => <th key={h} className="text-left px-4 py-3 text-xs text-gray-500 font-medium">{h}</th>)}
+                </tr></thead>
+                <tbody className="divide-y divide-white/5">
+                  {[
+                    ['amount_usdt','number','Yes','Amount of USDT/USDC to send'],
+                    ['destination_address','string','Yes','Customer wallet address'],
+                    ['payment_method_id','string','Yes','"lipa-number" for Tanzania'],
+                    ['network','string','Yes','BEP20 | TRC20 | BASE | POLYGON'],
+                    ['country_code','string','Yes','TZ | KE | UG'],
+                    ['user_phone','string','No','Customer phone number'],
+                  ].map(([p,t,r,d]) => (
+                    <tr key={p}>
+                      <td className="px-4 py-3 font-mono text-xs text-blue-300">{p}</td>
+                      <td className="px-4 py-3 text-xs text-gray-400">{t}</td>
+                      <td className="px-4 py-3 text-xs text-gray-400">{r}</td>
+                      <td className="px-4 py-3 text-xs text-gray-400">{d}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500">Response 200</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                {'{'}<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"order_number"</span>: <span className="text-orange-400">"ORD-20260220-7450"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"status"</span>: <span className="text-orange-400">"PENDING"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"amount_fiat"</span>: <span className="text-yellow-400">25800</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"currency"</span>: <span className="text-orange-400">"TZS"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"payment_instructions"</span>: {'{'} <span className="text-green-400">"account_number"</span>: <span className="text-orange-400">"70005436"</span> {'}'}<br/>
+                {'}'}
+              </div>
+            </div>
+          </section>
 
-        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 backdrop-blur-xl p-8 mb-8">
-          <h2 className="text-3xl font-bold mb-4 text-white">Create Sell Order (Offramp)</h2>
-          <p className="text-gray-300 mb-6 text-lg">
-            Create an order for your user to sell USDC/USDT and receive fiat.
-          </p>
-          <div className="mb-6 flex items-center gap-3">
-            <span className="bg-blue-500/20 text-blue-300 px-4 py-2 rounded-lg font-mono text-sm font-bold border border-blue-500/30">POST</span>
-            <span className="font-mono text-gray-300 text-lg">/offramp</span>
-          </div>
-          <div className="mb-3 text-sm text-gray-400 font-semibold">Request Body:</div>
-          <pre className="bg-black/40 border border-white/10 text-gray-100 p-6 rounded-xl overflow-x-auto">
-{`{
-  "partner_order_id": "SELL-12345",
-  "amount_usdt": 100,
-  "recipient_phone": "0765123456",
-  "network": "BEP20",
-  "country_code": "TZ"
-}`}
-          </pre>
-        </div>
+          <section id="verify-payment--public-">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="bg-blue-500/10 text-blue-400 text-xs font-semibold px-2.5 py-1 rounded-md border border-blue-500/20 font-mono">POST</span>
+              <h2 className="text-2xl font-bold tracking-tight">Verify Payment (Public)</h2>
+            </div>
+            <p className="text-gray-400 mb-2 leading-relaxed">Customer submits their SMS Transaction ID. No API key required. On success, USDT is automatically sent to their wallet.</p>
+            <div className="bg-amber-500/5 border border-amber-500/20 rounded-lg px-4 py-3 mb-6">
+              <p className="text-xs text-amber-400">No authentication required — safe to call from client-side or mobile app.</p>
+            </div>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden mb-4">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500 font-mono">POST /api/v1/public/verify-payment</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                {'{'}<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"order_number"</span>: <span className="text-orange-400">"ORD-20260220-7450"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"transaction_id"</span>: <span className="text-orange-400">"QH12345678"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"phone_number"</span>: <span className="text-orange-400">"255765123456"</span><br/>
+                {'}'}
+              </div>
+            </div>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500">Response 200</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                {'{'}<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"success"</span>: <span className="text-blue-400">true</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"message"</span>: <span className="text-orange-400">"Payment verified! Your crypto has been sent."</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"status"</span>: <span className="text-orange-400">"COMPLETED"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"amount_sent"</span>: <span className="text-orange-400">"10 USDT"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"tx_hash"</span>: <span className="text-orange-400">"0x5ab8275d60ef7eb172..."</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"explorer_url"</span>: <span className="text-orange-400">"https://bscscan.com/tx/0x5ab..."</span><br/>
+                {'}'}
+              </div>
+            </div>
+          </section>
 
-        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 backdrop-blur-xl p-8 mb-8">
-          <h2 className="text-3xl font-bold mb-4 text-white">Get Order Status</h2>
-          <p className="text-gray-300 mb-6 text-lg">
-            Retrieve the current status of any order.
-          </p>
-          <div className="mb-6 flex items-center gap-3">
-            <span className="bg-green-500/20 text-green-300 px-4 py-2 rounded-lg font-mono text-sm font-bold border border-green-500/30">GET</span>
-            <span className="font-mono text-gray-300 text-lg">/orders/:orderNumber</span>
-          </div>
-        </div>
+          <section id="webhook-events">
+            <h2 className="text-2xl font-bold tracking-tight mb-4">Webhook Events</h2>
+            <p className="text-gray-400 mb-6 leading-relaxed">Configure a webhook URL to receive real-time order status updates as POST requests.</p>
+            <div className="space-y-3 mb-6">
+              {[
+                ['order.created','A new order has been created and is awaiting payment.'],
+                ['order.processing','Payment verified, crypto is being sent.'],
+                ['order.completed','Crypto successfully sent to the destination wallet.'],
+                ['order.failed','Order failed. Check error_message for details.'],
+              ].map(([event, desc]) => (
+                <div key={event} className="bg-[#161b22] border border-white/10 rounded-lg px-4 py-3 flex items-start gap-4">
+                  <code className="text-xs font-mono text-blue-300 bg-blue-500/10 px-2 py-1 rounded whitespace-nowrap">{event}</code>
+                  <p className="text-sm text-gray-400">{desc}</p>
+                </div>
+              ))}
+            </div>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500">Webhook payload (order.completed)</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                {'{'}<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"event"</span>: <span className="text-orange-400">"order.completed"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"order_number"</span>: <span className="text-orange-400">"ORD-20260220-7450"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"status"</span>: <span className="text-orange-400">"COMPLETED"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"amount_crypto"</span>: <span className="text-yellow-400">10</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"currency"</span>: <span className="text-orange-400">"USDT"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"network"</span>: <span className="text-orange-400">"BEP20"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"tx_hash"</span>: <span className="text-orange-400">"0x5ab8275d60ef7eb172a968fb..."</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"timestamp"</span>: <span className="text-orange-400">"2026-02-20T12:35:00.000Z"</span><br/>
+                {'}'}
+              </div>
+            </div>
+          </section>
 
-        <div className="bg-gradient-to-br from-white/5 to-white/10 rounded-2xl border border-white/10 backdrop-blur-xl p-8">
-          <h2 className="text-3xl font-bold mb-4 text-white">Webhooks</h2>
-          <p className="text-gray-300 mb-6 text-lg">
-            Configure your webhook URL in the admin dashboard. We send POST requests when order status changes.
-          </p>
-          <div className="mb-3 text-sm text-gray-400 font-semibold">Events:</div>
-          <ul className="list-none space-y-2 text-gray-300 mb-6">
-            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> ORDER_CREATED</li>
-            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> ORDER_VERIFYING</li>
-            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> ORDER_PROCESSING</li>
-            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> ORDER_COMPLETED</li>
-            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> ORDER_FAILED</li>
-            <li className="flex items-center gap-2"><Check className="w-4 h-4 text-green-400" /> ORDER_EXPIRED</li>
-          </ul>
-          <div className="mb-3 text-sm text-gray-400 font-semibold">Signature Verification:</div>
-          <pre className="bg-black/40 border border-white/10 text-gray-100 p-6 rounded-xl overflow-x-auto">
-{`const crypto = require('crypto');
+          <section id="errors">
+            <h2 className="text-2xl font-bold tracking-tight mb-4">Errors</h2>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden">
+              <table className="w-full text-sm">
+                <thead><tr className="border-b border-white/5">
+                  <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Status</th>
+                  <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Meaning</th>
+                </tr></thead>
+                <tbody className="divide-y divide-white/5">
+                  {[['400','Bad Request — missing or invalid parameters'],['401','Unauthorized — invalid or missing API key'],['404','Not Found — order does not exist'],['409','Conflict — order already verified'],['429','Too Many Requests — rate limit exceeded'],['500','Internal Server Error']].map(([code, meaning]) => (
+                    <tr key={code}>
+                      <td className="px-4 py-3 font-mono text-xs text-red-400">{code}</td>
+                      <td className="px-4 py-3 text-xs text-gray-400">{meaning}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
 
-function verifyWebhookSignature(payload, signature, secret) {
-  const [tPart, v1Part] = signature.split(',');
-  const timestamp = tPart.split('=')[1];
-  const expectedSig = v1Part.split('=')[1];
-  
-  const signedPayload = \`\${timestamp}.\${JSON.stringify(payload)}\`;
-  const computedSig = crypto
-    .createHmac('sha256', secret)
-    .update(signedPayload)
-    .digest('hex');
-  
-  return computedSig === expectedSig;
-}`}
-          </pre>
-        </div>
+        </main>
       </div>
+
+      <footer className="border-t border-white/5 mt-10">
+        <div className="max-w-7xl mx-auto px-6 py-8 flex justify-between items-center">
+          <Link href="/" className="flex items-center gap-2">
+            <div className="w-5 h-5 bg-blue-600 rounded flex items-center justify-center"><Sparkles className="w-3 h-3 text-white" /></div>
+            <span className="text-sm text-gray-500">Rampa</span>
+          </Link>
+          <p className="text-sm text-gray-600">© 2026 Rampa. Open-source fiat-to-crypto onramp API.</p>
+        </div>
+      </footer>
     </div>
   );
 }

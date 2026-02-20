@@ -5,7 +5,7 @@ import './globals.css'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'OnRampa - Multi-Country Fiat to Crypto Onramp API',
+  title: 'Rampa - Fiat to Crypto Onramp API',
   description: 'Enterprise-grade USDC/USDT onramp and offramp API for Africa',
 }
 
