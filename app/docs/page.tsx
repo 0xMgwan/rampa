@@ -152,6 +152,94 @@ export default function DocsPage() {
             </div>
           </section>
 
+          <section id="exchange-rates">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="bg-green-500/10 text-green-400 text-xs font-semibold px-2.5 py-1 rounded-md border border-green-500/20 font-mono">GET</span>
+              <h2 className="text-2xl font-bold tracking-tight">Exchange Rates</h2>
+            </div>
+            <p className="text-gray-400 mb-6 leading-relaxed">Returns current exchange rates for a country. Rates are refreshed every 5 minutes from live market data.</p>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden mb-4">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500 font-mono">GET /api/v1/partner/rates?country_code=TZ</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                <span className="text-gray-500">curl </span><span className="text-orange-400">'https://rampa-production.up.railway.app/api/v1/partner/rates?country_code=TZ'</span> \<br/>
+                &nbsp;&nbsp;<span className="text-gray-500">-H </span><span className="text-green-400">'X-API-Key: sk_live_your_key'</span>
+              </div>
+            </div>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500">Response 200</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                {'{'}<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"success"</span>: <span className="text-blue-400">true</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"country"</span>: {'{'} <span className="text-green-400">"code"</span>: <span className="text-orange-400">"TZ"</span>, <span className="text-green-400">"currency"</span>: <span className="text-orange-400">"TZS"</span> {'}'},<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"rates"</span>: {'{'}<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"USDT_TZS"</span>: <span className="text-yellow-400">2580</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"USDC_TZS"</span>: <span className="text-yellow-400">2578</span><br/>
+                &nbsp;&nbsp;{'}'},<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"updated_at"</span>: <span className="text-orange-400">"2026-02-20T12:00:00.000Z"</span><br/>
+                {'}'}
+              </div>
+            </div>
+          </section>
+
+          <section id="order-status">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="bg-green-500/10 text-green-400 text-xs font-semibold px-2.5 py-1 rounded-md border border-green-500/20 font-mono">GET</span>
+              <h2 className="text-2xl font-bold tracking-tight">Order Status</h2>
+            </div>
+            <p className="text-gray-400 mb-6 leading-relaxed">Retrieve the current status and details of an order by its order number. Use this to poll for updates or display order details to your customer.</p>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden mb-4">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500 font-mono">GET /api/v1/partner/orders/{'{orderNumber}'}</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                <span className="text-gray-500">curl </span><span className="text-orange-400">'https://rampa-production.up.railway.app/api/v1/partner/orders/ORD-20260220-7450'</span> \<br/>
+                &nbsp;&nbsp;<span className="text-gray-500">-H </span><span className="text-green-400">'X-API-Key: sk_live_your_key'</span>
+              </div>
+            </div>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden mb-4">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500">Response 200</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                {'{'}<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"success"</span>: <span className="text-blue-400">true</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"order"</span>: {'{'}<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"order_number"</span>: <span className="text-orange-400">"ORD-20260220-7450"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"status"</span>: <span className="text-orange-400">"COMPLETED"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"type"</span>: <span className="text-orange-400">"BUY"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"amount_crypto"</span>: <span className="text-yellow-400">10</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"crypto_type"</span>: <span className="text-orange-400">"USDT"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"network"</span>: <span className="text-orange-400">"BEP20"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"amount_fiat"</span>: <span className="text-yellow-400">25800</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"currency"</span>: <span className="text-orange-400">"TZS"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"destination_address"</span>: <span className="text-orange-400">"0xYourWalletAddress"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"tx_hash"</span>: <span className="text-orange-400">"0x5ab8275d60ef7eb172..."</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"created_at"</span>: <span className="text-orange-400">"2026-02-20T12:30:00.000Z"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"completed_at"</span>: <span className="text-orange-400">"2026-02-20T12:35:00.000Z"</span><br/>
+                &nbsp;&nbsp;{'}'}<br/>
+                {'}'}
+              </div>
+            </div>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden">
+              <table className="w-full text-sm">
+                <thead><tr className="border-b border-white/5">
+                  <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Status</th>
+                  <th className="text-left px-4 py-3 text-xs text-gray-500 font-medium">Meaning</th>
+                </tr></thead>
+                <tbody className="divide-y divide-white/5">
+                  {[
+                    ['PENDING', 'Order created, awaiting customer payment'],
+                    ['PROCESSING', 'Payment verified, sending crypto to wallet'],
+                    ['COMPLETED', 'Crypto successfully sent to destination wallet'],
+                    ['FAILED', 'Order failed — check error_message field'],
+                    ['EXPIRED', 'Order expired before payment was received'],
+                  ].map(([status, meaning]) => (
+                    <tr key={status}>
+                      <td className="px-4 py-3 font-mono text-xs text-blue-300">{status}</td>
+                      <td className="px-4 py-3 text-xs text-gray-400">{meaning}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+          </section>
+
           <section id="verify-payment--public-">
             <div className="flex items-center gap-3 mb-4">
               <span className="bg-blue-500/10 text-blue-400 text-xs font-semibold px-2.5 py-1 rounded-md border border-blue-500/20 font-mono">POST</span>
@@ -179,6 +267,45 @@ export default function DocsPage() {
                 &nbsp;&nbsp;<span className="text-green-400">"message"</span>: <span className="text-orange-400">"Payment verified! Your crypto has been sent."</span>,<br/>
                 &nbsp;&nbsp;<span className="text-green-400">"status"</span>: <span className="text-orange-400">"COMPLETED"</span>,<br/>
                 &nbsp;&nbsp;<span className="text-green-400">"amount_sent"</span>: <span className="text-orange-400">"10 USDT"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"tx_hash"</span>: <span className="text-orange-400">"0x5ab8275d60ef7eb172..."</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"explorer_url"</span>: <span className="text-orange-400">"https://bscscan.com/tx/0x5ab..."</span><br/>
+                {'}'}
+              </div>
+            </div>
+          </section>
+
+          <section id="verify-payment--partner-">
+            <div className="flex items-center gap-3 mb-4">
+              <span className="bg-blue-500/10 text-blue-400 text-xs font-semibold px-2.5 py-1 rounded-md border border-blue-500/20 font-mono">POST</span>
+              <h2 className="text-2xl font-bold tracking-tight">Verify Payment (Partner)</h2>
+            </div>
+            <p className="text-gray-400 mb-2 leading-relaxed">Partner-side endpoint to verify a customer's payment on their behalf. Requires API key. Useful when you want to handle verification server-side rather than exposing it to the customer.</p>
+            <div className="bg-blue-500/5 border border-blue-500/20 rounded-lg px-4 py-3 mb-6">
+              <p className="text-xs text-blue-400">Requires <code className="bg-white/5 px-1 rounded font-mono">X-API-Key</code> authentication. Call this from your backend only.</p>
+            </div>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden mb-4">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500 font-mono">POST /api/v1/partner/verify-payment</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                <span className="text-gray-500">curl -X POST </span><span className="text-orange-400">'https://rampa-production.up.railway.app/api/v1/partner/verify-payment'</span> \<br/>
+                &nbsp;&nbsp;<span className="text-gray-500">-H </span><span className="text-green-400">'X-API-Key: sk_live_your_key'</span> \<br/>
+                &nbsp;&nbsp;<span className="text-gray-500">-H </span><span className="text-green-400">'Content-Type: application/json'</span> \<br/>
+                &nbsp;&nbsp;<span className="text-gray-500">-d </span><span className="text-green-400">'{'{'}</span><br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"order_number"</span>: <span className="text-orange-400">"ORD-20260220-7450"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"transaction_id"</span>: <span className="text-orange-400">"QH12345678"</span>,<br/>
+                &nbsp;&nbsp;&nbsp;&nbsp;<span className="text-green-400">"phone_number"</span>: <span className="text-orange-400">"255765123456"</span><br/>
+                &nbsp;&nbsp;<span className="text-green-400">{'}'}'</span>
+              </div>
+            </div>
+            <div className="bg-[#161b22] border border-white/10 rounded-xl overflow-hidden">
+              <div className="px-4 py-3 border-b border-white/5"><span className="text-xs text-gray-500">Response 200</span></div>
+              <div className="p-5 font-mono text-xs text-gray-300 leading-relaxed">
+                {'{'}<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"success"</span>: <span className="text-blue-400">true</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"message"</span>: <span className="text-orange-400">"Payment verified and crypto sent successfully."</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"order_number"</span>: <span className="text-orange-400">"ORD-20260220-7450"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"status"</span>: <span className="text-orange-400">"COMPLETED"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"amount_sent"</span>: <span className="text-orange-400">"10 USDT"</span>,<br/>
+                &nbsp;&nbsp;<span className="text-green-400">"network"</span>: <span className="text-orange-400">"BEP20"</span>,<br/>
                 &nbsp;&nbsp;<span className="text-green-400">"tx_hash"</span>: <span className="text-orange-400">"0x5ab8275d60ef7eb172..."</span>,<br/>
                 &nbsp;&nbsp;<span className="text-green-400">"explorer_url"</span>: <span className="text-orange-400">"https://bscscan.com/tx/0x5ab..."</span><br/>
                 {'}'}
